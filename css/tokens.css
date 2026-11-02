@@ -1,0 +1,139 @@
+:root {
+  color-scheme: light;
+
+  --color-bg: #ffffff;
+  --color-surface: #f8f8f8;
+  --color-surface-2: #f0f0f0;
+  --color-hero-placeholder: #787878;
+  --color-text: #000000;
+  --color-text-strong: #000000;
+  --color-text-sub: #505050;
+  --color-text-muted: #787878;
+  --color-text-faint: #949494;
+  --color-text-inverse: #ffffff;
+  --color-border: #e8e8e8;
+  --color-border-strong: #000000;
+  --color-border-on-dark: #ffffff;
+  --color-primary: #000000;
+  --color-on-primary: #ffffff;
+  --chip-fill-on-dark: rgb(255 255 255 / 20%);
+  --overlay-hero: linear-gradient(180deg, rgb(0 0 0 / 0) 0.18%, rgb(0 0 0 / 56%) 99.82%);
+  --overlay-header-m: linear-gradient(0deg, rgb(0 0 0 / 0) 0%, rgb(0 0 0 / 56%) 100%);
+
+  --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+
+  --body-min-width: 320px;
+  --line-height-body: 1.5;
+  --fs-10: 0.625rem;
+  --fs-12: 0.75rem;
+  --fs-14: 0.875rem;
+  --fs-16: 1rem;
+  --fs-18: 1.125rem;
+  --fs-20: 1.25rem;
+  --fs-24: 1.5rem;
+  --fs-48: 3rem;
+  --lh-16: 1rem;
+  --lh-18: 1.125rem;
+  --lh-20: 1.25rem;
+  --lh-24: 1.5rem;
+  --lh-28: 1.75rem;
+  --lh-32: 2rem;
+  --lh-60: 3.75rem;
+  --fs-hero-title: var(--fs-24);
+  --lh-hero-title: var(--lh-32);
+  --fs-hero-description: var(--fs-14);
+  --lh-hero-description: var(--lh-20);
+  --fs-category: var(--fs-16);
+  --lh-category: var(--lh-20);
+
+  --inner-max: 1920px;
+  --gutter: 20px;
+  --gutter-zero: 0px;
+  --part-gap: 20px;
+  --section-pt: 56px;
+  --section-pb: 40px;
+  --header-h-pc: 40px;
+  --header-content-gap: 4px;
+  --header-mobile-padding-top: 8px;
+  --header-mobile-padding-bottom: 12px;
+  --header-action-gap: 0px;
+  --brand-size: var(--fs-16);
+  --brand-gap: 2px;
+  --brand-symbol: 12px;
+  --brand-sub-indent: 12px;
+  --category-gap: 4px;
+  --category-padding-block: 4px;
+  --category-padding-inline: 12px;
+  --category-border: 1px;
+  --icon-size: 16px;
+  --icon-stroke: 1.25px;
+  --hero-height: 100svh;
+  --hero-inset: 20px;
+  --hero-top-inset: 64px;
+  --hero-content-pb: 76px;
+  --hero-copy-gap: 8px;
+  --icon-btn: 36px;
+  --hit-min: 44px;
+  --pagination-gap: 8px;
+  --pagination-width: 3px;
+  --pagination-height: 16px;
+  --pagination-active-height: 36px;
+  --pagination-radius: 8px;
+  --pagination-opacity: 0.3;
+  --floating-btn: 40px;
+  --floating-inset: 20px;
+  --floating-icon: 18px;
+  --floating-gap: 8px;
+  --skip-link-inset: 8px;
+  --skip-link-padding: 8px;
+  --skip-link-offset: -100%;
+  --line: 1px;
+  --radius-pill: 40px;
+  --radius-round: 50%;
+  --focus-outline: 2px;
+  --focus-offset: 2px;
+  --z-header: 100;
+  --z-floating: 10;
+
+  --header-bg: var(--overlay-header-m);
+}
+
+@media (min-width: 769px) {
+  :root {
+    --gutter: 4.375vw;
+    --hero-inset: 4.375vw;
+    --hero-content-pb: 56px;
+    --hero-top-inset: var(--header-h-pc);
+    --header-bg: transparent;
+    --header-content-gap: 20px;
+    --brand-size: var(--fs-18);
+    --brand-gap: 3px;
+    --brand-symbol: 14px;
+    --brand-sub-indent: 16px;
+    --category-gap: 4px;
+    --category-padding-block: 3px;
+    --category-padding-inline: 12px;
+    --category-border: 1.5px;
+    --fs-category: var(--fs-18);
+    --lh-category: var(--lh-24);
+    --header-action-gap: 4px;
+    --icon-size: 18px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --hero-content-pb: 84px;
+    --fs-hero-title: var(--fs-48);
+    --lh-hero-title: var(--lh-60);
+    --fs-hero-description: var(--fs-20);
+    --lh-hero-description: var(--lh-28);
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --gutter: 84px;
+    --hero-inset: 84px;
+  }
+}

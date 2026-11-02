@@ -1,0 +1,132 @@
+@layer components {
+  .hero {
+    min-height: var(--hero-height);
+    overflow: hidden;
+    background: var(--color-hero-placeholder);
+    color: var(--color-text-inverse);
+    --focus-color: var(--color-text-inverse);
+  }
+
+  .hero__inner {
+    min-height: var(--hero-height);
+  }
+
+  .hero__stage {
+    position: relative;
+    flex-wrap: nowrap;
+    min-height: var(--hero-height);
+    align-items: stretch;
+    padding: var(--hero-top-inset) var(--hero-inset) var(--hero-content-pb);
+  }
+
+  .hero__image-placeholder {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background: var(--color-hero-placeholder);
+  }
+
+  .hero__image-placeholder::after {
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-hero);
+    content: "";
+  }
+
+  .hero__copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: var(--hero-copy-gap);
+  }
+
+  .hero__title {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--fs-hero-title);
+    font-weight: 700;
+    line-height: var(--lh-hero-title);
+    overflow-wrap: anywhere;
+    word-break: keep-all;
+  }
+
+  .hero__description {
+    font-size: var(--fs-hero-description);
+    font-weight: 400;
+    line-height: var(--lh-20);
+    word-break: keep-all;
+  }
+
+  .hero__pagination {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-self: center;
+    gap: var(--pagination-gap);
+  }
+
+  .hero__pagination-item {
+    width: var(--pagination-width);
+    height: var(--pagination-height);
+    border-radius: var(--pagination-radius);
+    background: var(--color-text-inverse);
+    opacity: var(--pagination-opacity);
+  }
+
+  .hero__pagination-item--active {
+    height: var(--pagination-active-height);
+    opacity: 1;
+  }
+
+  .floating-actions {
+    position: fixed;
+    z-index: var(--z-floating);
+    inset-block-end: var(--floating-inset);
+    inset-inline-end: var(--floating-inset);
+    display: flex;
+    flex-direction: column;
+    gap: var(--floating-gap);
+  }
+
+  .floating-actions__button {
+    display: flex;
+    width: var(--floating-btn);
+    height: var(--floating-btn);
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-round);
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .floating-actions__button svg {
+    width: var(--floating-icon);
+    height: var(--floating-icon);
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: var(--icon-stroke);
+  }
+
+  @media (min-width: 769px) {
+    .hero__stage {
+      min-height: var(--hero-height);
+    }
+
+    .hero__title {
+      font-size: var(--fs-hero-title);
+      line-height: var(--lh-hero-title);
+    }
+
+    .hero__description {
+      font-size: var(--fs-hero-description);
+      line-height: var(--lh-hero-description);
+    }
+  }
+}

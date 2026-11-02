@@ -1,0 +1,16 @@
+@layer utilities {
+  .skip-link {
+    position: fixed;
+    z-index: var(--z-header);
+    inset-block-start: var(--skip-link-inset);
+    inset-inline-start: var(--skip-link-inset);
+    padding: var(--skip-link-padding);
+    transform: translateY(var(--skip-link-offset));
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+}

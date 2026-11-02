@@ -1,0 +1,126 @@
+@layer components {
+  .header__content {
+    min-height: var(--header-h-pc);
+    align-items: center;
+    gap: var(--header-content-gap);
+    padding-block: var(--header-mobile-padding-top) var(--header-mobile-padding-bottom);
+  }
+
+  .outer-box--header {
+    --focus-color: var(--color-text-inverse);
+  }
+
+  .brand {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    width: fit-content;
+    line-height: 1;
+  }
+
+  .brand__name {
+    display: flex;
+    align-items: center;
+    gap: var(--brand-gap);
+    font-size: var(--brand-size);
+    font-weight: 700;
+  }
+
+  .brand__symbol {
+    width: var(--brand-symbol);
+    height: var(--brand-symbol);
+    border: var(--line) solid currentColor;
+    border-radius: var(--radius-round);
+  }
+
+  .brand__subname {
+    padding-inline-start: var(--brand-sub-indent);
+    font-size: var(--fs-10);
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .header__navigation {
+    display: flex;
+    flex: 1 0 100%;
+    justify-content: center;
+    order: 2;
+  }
+
+  .header__categories {
+    gap: var(--category-gap);
+    align-items: center;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .header__categories::-webkit-scrollbar {
+    display: none;
+  }
+
+  .header__category {
+    display: block;
+    padding: var(--category-padding-block) var(--category-padding-inline);
+    border: var(--category-border) solid transparent;
+    border-radius: var(--radius-pill);
+    color: var(--color-text-inverse);
+    font-size: var(--fs-category);
+    font-weight: 500;
+    line-height: var(--lh-category);
+    white-space: nowrap;
+  }
+
+  .header__category--active {
+    border-color: var(--color-border-on-dark);
+    background: var(--chip-fill-on-dark);
+    font-weight: 700;
+  }
+
+  .header__actions {
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    gap: var(--header-action-gap);
+  }
+
+  .icon-button {
+    display: flex;
+    flex: 0 0 var(--icon-btn);
+    min-width: var(--hit-min);
+    min-height: var(--hit-min);
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-inverse);
+  }
+
+  .icon-button svg {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: var(--icon-stroke);
+  }
+
+  @media (min-width: 769px) {
+    .header__content {
+      flex-wrap: nowrap;
+      padding-block: 0;
+    }
+
+    .header__navigation {
+      flex: 0 1 auto;
+      order: 0;
+    }
+
+    .header__actions {
+      flex: 1 1 0;
+    }
+
+    .header__categories {
+      justify-content: center;
+      overflow: visible;
+    }
+  }
+
+}
