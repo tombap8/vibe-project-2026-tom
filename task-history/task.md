@@ -59,3 +59,14 @@
 - 여성·남성·신발·용품·키즈·아울렛 탭 콘텐츠에 `images/menu` 상품 이미지를 연결했다.
 - 키보드 탭 전환, Escape 닫기, 포커스 이동 및 복원, 배경 콘텐츠 inert 처리를 적용했다.
 - 브라우저에서 탭 전환, sticky 탭, 모바일 하단 닫기 버튼, 뷰포트별 메뉴 영역을 확인했다.
+
+## 2026-11-03 — 2번째, 3번째 페이지 및 풀페이지 원스크롤 구현
+
+- `main` 태그 내부에 1번째 페이지와 동일한 3단 계층(`.outer-box` > `.inner-box` > `.part-box`)으로 2번째(`hero--slide-2`), 3번째(`hero--slide-3`) 섹션을 구성했다.
+- 제공된 이미지를 정밀 분석하여 적합한 데스크톱/모바일 배경 이미지를 `images/used/`에 복사 및 매칭했다.
+  - 2번째 슬라이드: 데스크톱 `discovery-dt-62.jpg` / 모바일 `discovery-mob-46.jpg` (타이틀: `AIRWELL, THEIR WAY`, 설명: `에어웰로 완성한 취향이 돋보이는 겨울 스타일`)
+  - 3번째 슬라이드: 데스크톱 `discovery-dt-67.jpg` / 모바일 `discovery-mob-42.jpg` (타이틀: `Discover My Active Wellness`, 설명: `가벼운 보온 기능에 감각적인 스타일을 더한 에어웰 경량패딩`)
+- 상단 헤더, 모바일 탭바, 우측 플로팅 버튼 등의 고정 UI를 그대로 유지했다.
+- 우측 슬라이드 인디케이터를 전역 고정 내비게이션으로 확장하고 키보드 접근성 및 클릭 전환을 지원하도록 구현했다.
+- CSS `scroll-snap-type: y mandatory` 및 `scroll-snap-align: start; scroll-snap-stop: always;`와 함께 마우스 휠 단위 스크롤 제어 JS(`initFullPageScroll()`)를 구현하여 마우스 휠 1번에 한 페이지만 정확하게 이동하도록 처리했다.
+- `IntersectionObserver`로 현재 뷰포트에 위치한 페이지를 실시간 감지하여 오른쪽 인디케이터의 활성 바가 흰색으로 정확히 표시되도록 연동했다.

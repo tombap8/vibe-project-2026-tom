@@ -286,8 +286,7 @@ document.addEventListener("keydown", (event) => {
   const focusable = [
     ...menu.querySelectorAll('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'),
     ...(mobileViewport.matches ? [mobileMenuTrigger] : []),
-  ]
-    .filter((element) => element.getClientRects().length > 0);
+  ].filter((element) => element.getClientRects().length > 0);
   if (!focusable.length) return;
 
   const first = focusable[0];
@@ -309,3 +308,118 @@ mobileViewport.addEventListener("change", () => {
 });
 
 selectMenuTab(menuTabs[0]);
+
+/* --- 히어로 섹션 풀페이지 스크롤 & 인디케이터 제어 --- */
+function initFullPageScroll() {
+  const heroSections = [...document.querySelectorAll(".hero")];
+  const paginationItems = [...document.querySelectorAll(".hero__pagination-item")];
+
+  if (heroSections.length === 0) return;
+
+  let currentHeroIndex = 0;
+  let isScrolling = false;
+  let scrollEndTimer = null;
+
+  function updatePagination(index) {
+    if (index < 0 || index >= heroSections.length) return;
+    currentHeroIndex = index;
+    paginationItems.forEach((item, idx) => {
+      const isActive = idx === index;
+      item.classList.toggle("hero__pagination-item--active", isActive);
+      item.setAttribute("aria-current", String(isActive));
+    });
+  }
+
+  function scrollToSection(index) {
+    if (index < 0 || index >= heroSections.length) return;
+    const targetSection = heroSections[index];
+    if (!targetSection) return;
+
+    isScrolling = true;
+    updatePagination(index);
+    targetSection.scrollIntoView({ behavior: "smooth" });
+
+    window.clearTimeout(scrollEndTimer);
+    scrollEndTimer = window.setTimeout(() => {
+      isScrolling = false;
+    }, 700);
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const index = heroSections.indexOf(entry.target);
+          if (index !== -1) {
+            updatePagination(index);
+          }
+        }
+      });
+    },
+    {
+      root: null,
+      threshold: 0.5,
+    }
+  );
+
+  heroSections.forEach((section) => observer.observe(section));
+
+  paginationItems.forEach((item, index) => {
+    item.addEventListener("click", () => {
+      scrollToSection(index);
+    });
+  });
+
+  window.addEventListener(
+    "wheel",
+    (event) => {
+      if (menu.dataset.state === "open" || menu.dataset.state === "opening") return;
+
+      if (isScrolling) {
+        event.preventDefault();
+        return;
+      }
+
+      const delta = event.deltaY;
+      if (Math.abs(delta) < 20) return;
+
+      if (delta > 0 && currentHeroIndex < heroSections.length - 1) {
+        event.preventDefault();
+        scrollToSection(currentHeroIndex + 1);
+      } else if (delta < 0 && currentHeroIndex > 0) {
+        event.preventDefault();
+        scrollToSection(currentHeroIndex - 1);
+      }
+    },
+    { passive: false }
+  );
+
+  window.addEventListener("keydown", (event) => {
+    if (menu.dataset.state === "open" || menu.dataset.state === "opening") return;
+    if (document.activeElement?.closest("input, textarea, select")) return;
+
+    if (event.key === "ArrowDown" || event.key === "PageDown") {
+      if (currentHeroIndex < heroSections.length - 1) {
+        event.preventDefault();
+        scrollToSection(currentHeroIndex + 1);
+      }
+    } else if (event.key === "ArrowUp" || event.key === "PageUp") {
+      if (currentHeroIndex > 0) {
+        event.preventDefault();
+        scrollToSection(currentHeroIndex - 1);
+      }
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      scrollToSection(0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      scrollToSection(heroSections.length - 1);
+    }
+  });
+
+  window.addEventListener("scrollend", () => {
+    isScrolling = false;
+  });
+}
+
+initFullPageScroll();

@@ -45,7 +45,7 @@
     </header>
 
     <main id="main-content">
-      <section class="outer-box outer-box--bleed hero" id="hero" aria-labelledby="hero-title">
+      <section class="outer-box outer-box--bleed hero hero--slide-1" id="hero" aria-labelledby="hero-title">
         <div class="inner-box hero__inner">
           <div class="part-box hero__stage">
             <div class="hero__image" aria-hidden="true"></div>
@@ -56,15 +56,46 @@
               </h1>
               <p class="hero__description">프리미엄 에센셜 다운과 윈터 슈즈가 만드는 균형 잡힌 비율</p>
             </div>
-            <div class="hero__pagination" role="group" aria-label="프로모션 슬라이드 1">
-              <span class="hero__pagination-item hero__pagination-item--active"></span>
-              <span class="hero__pagination-item"></span>
-              <span class="hero__pagination-item"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="outer-box outer-box--bleed hero hero--slide-2" id="hero-2" aria-labelledby="hero-title-2">
+        <div class="inner-box hero__inner">
+          <div class="part-box hero__stage">
+            <div class="hero__image" aria-hidden="true"></div>
+            <div class="hero__copy">
+              <h2 class="hero__title" id="hero-title-2">
+                <span>AIRWELL,</span>
+                <span>THEIR WAY</span>
+              </h2>
+              <p class="hero__description">에어웰로 완성한 취향이 돋보이는 겨울 스타일</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="outer-box outer-box--bleed hero hero--slide-3" id="hero-3" aria-labelledby="hero-title-3">
+        <div class="inner-box hero__inner">
+          <div class="part-box hero__stage">
+            <div class="hero__image" aria-hidden="true"></div>
+            <div class="hero__copy">
+              <h2 class="hero__title" id="hero-title-3">
+                <span>Discover</span>
+                <span>My Active Wellness</span>
+              </h2>
+              <p class="hero__description">가벼운 보온 기능에 감각적인 스타일을 더한 에어웰 경량패딩</p>
             </div>
           </div>
         </div>
       </section>
     </main>
+
+    <nav class="hero__pagination" aria-label="프로모션 슬라이드 선택">
+      <button class="hero__pagination-item hero__pagination-item--active" type="button" aria-label="1번 슬라이드로 이동: DISCOVER MY ACTIVE WINTER" aria-current="true" data-index="0"></button>
+      <button class="hero__pagination-item" type="button" aria-label="2번 슬라이드로 이동: AIRWELL, THEIR WAY" aria-current="false" data-index="1"></button>
+      <button class="hero__pagination-item" type="button" aria-label="3번 슬라이드로 이동: Discover My Active Wellness" aria-current="false" data-index="2"></button>
+    </nav>
 
     <section class="full-menu" id="full-menu" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="full-menu-title" hidden inert data-state="closed">
       <div class="full-menu__panel">
