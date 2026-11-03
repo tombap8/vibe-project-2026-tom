@@ -9,8 +9,6 @@
     <script type="module" src="./js/main.js"></script>
   </head>
   <body>
-    <a class="skip-link" href="#main-content">본문 바로가기</a>
-
     <header class="outer-box outer-box--header">
       <div class="inner-box">
         <div class="part-box part-box--between header__content">
@@ -38,7 +36,7 @@
             <button class="icon-button" type="button" aria-label="마이페이지">
               <img src="./images/used/mypage_icon_white_size28.ecf13ebe.svg" alt="">
             </button>
-            <button class="icon-button icon-button--menu" type="button" aria-label="전체 메뉴">
+            <button class="icon-button icon-button--menu" type="button" aria-label="전체 메뉴" aria-expanded="false" aria-controls="full-menu">
               <img src="./images/used/menu_icon_white_size28.fd4f622b.svg" alt="">
             </button>
           </div>
@@ -68,6 +66,30 @@
       </section>
     </main>
 
+    <section class="full-menu" id="full-menu" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="full-menu-title" hidden inert data-state="closed">
+      <div class="full-menu__panel">
+        <div class="full-menu__scroll">
+          <div class="full-menu__tabs">
+            <h2 class="visually-hidden" id="full-menu-title">전체 메뉴</h2>
+            <div class="full-menu__tablist" role="tablist" aria-label="상품 분류">
+              <button class="full-menu__tab full-menu__tab--active" id="full-menu-tab-women" type="button" role="tab" aria-selected="true" aria-controls="full-menu-content" data-category="여성">여성</button>
+              <button class="full-menu__tab" id="full-menu-tab-men" type="button" role="tab" aria-selected="false" aria-controls="full-menu-content" tabindex="-1" data-category="남성">남성</button>
+              <button class="full-menu__tab" id="full-menu-tab-shoes" type="button" role="tab" aria-selected="false" aria-controls="full-menu-content" tabindex="-1" data-category="신발">신발</button>
+              <button class="full-menu__tab" id="full-menu-tab-gear" type="button" role="tab" aria-selected="false" aria-controls="full-menu-content" tabindex="-1" data-category="용품">용품</button>
+              <button class="full-menu__tab" id="full-menu-tab-kids" type="button" role="tab" aria-selected="false" aria-controls="full-menu-content" tabindex="-1" data-category="키즈">키즈</button>
+              <button class="full-menu__tab" id="full-menu-tab-outlet" type="button" role="tab" aria-selected="false" aria-controls="full-menu-content" tabindex="-1" data-category="아울렛">아울렛</button>
+            </div>
+            <button class="full-menu__close" type="button" aria-label="전체 메뉴 닫기">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="m6 6 12 12M18 6 6 18"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="full-menu__content" id="full-menu-content" role="tabpanel" aria-labelledby="full-menu-tab-women" tabindex="0"></div>
+        </div>
+      </div>
+    </section>
+
     <aside class="floating-actions" aria-label="빠른 메뉴">
       <button class="floating-actions__button" type="button" aria-label="채팅 문의">
         <img src="./images/used/floating-btn-chat.svg" alt="">
@@ -78,8 +100,11 @@
     </aside>
 
     <nav class="tabbar" aria-label="모바일 빠른 메뉴">
-      <button class="tabbar__item" type="button" aria-label="카테고리">
-        <img src="./images/used/menu_icon_white_size28.fd4f622b.svg" alt="">
+      <button class="tabbar__item tabbar__item--category" type="button" aria-label="카테고리" aria-expanded="false" aria-controls="full-menu">
+        <img class="tabbar__menu-icon" src="./images/used/menu_icon_white_size28.fd4f622b.svg" alt="">
+        <svg class="tabbar__close-icon" aria-hidden="true" viewBox="0 0 24 24">
+          <path d="m6 6 12 12M18 6 6 18"></path>
+        </svg>
         <span>카테고리</span>
       </button>
       <button class="tabbar__item" type="button" aria-label="검색">

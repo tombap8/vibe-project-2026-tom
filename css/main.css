@@ -5,4 +5,5 @@
 @import "./layout.css";
 @import "./components/header.css";
 @import "./components/hero.css";
+@import "./components/full-menu.css";
 @import "./utilities.css";
