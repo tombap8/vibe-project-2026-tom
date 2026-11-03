@@ -65,10 +65,23 @@ const pageHeader = document.querySelector(".outer-box--header");
 const pageMain = document.querySelector("main");
 const floatingActions = document.querySelector(".floating-actions");
 const tabbar = document.querySelector(".tabbar");
+const paginationNav = document.querySelector(".hero__pagination");
 const mobileViewport = window.matchMedia("(max-width: 768px)");
+
+const searchModal = document.querySelector(".search-modal");
+const desktopSearchTrigger = document.querySelector(".icon-button--search");
+const mobileSearchTrigger = document.querySelector(".tabbar__item--search");
+const searchCloseButton = document.querySelector(".search-modal__close");
+const searchInput = document.querySelector(".search-modal__input");
+const searchTabs = [...document.querySelectorAll(".search-modal__tab")];
+const searchTagRemoveButtons = [...document.querySelectorAll(".search-modal__tag-remove")];
+const searchClearAllButton = document.querySelector(".search-modal__clear-all");
+
 let menuOpener = null;
+let searchOpener = null;
 let closeTimer = 0;
 let openTimer = 0;
+let searchCloseTimer = 0;
 
 function createMenuItem(label, index) {
   const link = document.createElement("a");
@@ -178,6 +191,7 @@ function setBackgroundInert(isInert) {
   pageHeader.inert = isInert;
   pageMain.inert = isInert;
   floatingActions.inert = isInert;
+  if (paginationNav) paginationNav.inert = isInert;
   tabbar.inert = !mobileViewport.matches;
   tabbar.querySelectorAll(":scope > :not(.tabbar__item--category)").forEach((item) => {
     item.inert = isInert;
@@ -274,40 +288,131 @@ menu.addEventListener("transitionend", (event) => {
     finishClose();
   }
 });
-document.addEventListener("keydown", (event) => {
-  if (menu.hidden || menu.dataset.state === "closed") return;
-  if (event.key === "Escape") {
-    event.preventDefault();
-    closeMenu();
-    return;
-  }
-
-  if (menu.dataset.state !== "open" || event.key !== "Tab") return;
-  const focusable = [
-    ...menu.querySelectorAll('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'),
-    ...(mobileViewport.matches ? [mobileMenuTrigger] : []),
-  ].filter((element) => element.getClientRects().length > 0);
-  if (!focusable.length) return;
-
-  const first = focusable[0];
-  const last = focusable[focusable.length - 1];
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault();
-    last.focus();
-  } else if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault();
-    first.focus();
-  }
-});
-mobileViewport.addEventListener("change", () => {
-  if (menu.hidden) return;
-  setBackgroundInert(true);
-  const label = mobileViewport.matches ? "닫기" : "카테고리";
-  mobileMenuTrigger.setAttribute("aria-label", label);
-  mobileMenuLabel.textContent = label;
-});
 
 selectMenuTab(menuTabs[0]);
+
+/* --- 검색 모달 (Fixed) 상호작용 제어 --- */
+function initSearchModal() {
+  if (!searchModal) return;
+
+  function setSearchInert(isInert) {
+    pageHeader.inert = isInert;
+    pageMain.inert = isInert;
+    floatingActions.inert = isInert;
+    if (paginationNav) paginationNav.inert = isInert;
+    if (tabbar) tabbar.inert = isInert;
+  }
+
+  function openSearch(opener) {
+    if (menu.dataset.state === "open") closeMenu();
+    searchOpener = opener;
+    searchModal.hidden = false;
+    searchModal.inert = false;
+    searchModal.setAttribute("aria-hidden", "false");
+    document.documentElement.classList.add("modal-open");
+    document.body.classList.add("modal-open");
+    setSearchInert(true);
+
+    if (desktopSearchTrigger) desktopSearchTrigger.setAttribute("aria-expanded", "true");
+    if (mobileSearchTrigger) mobileSearchTrigger.setAttribute("aria-expanded", "true");
+
+    window.requestAnimationFrame(() => {
+      searchModal.dataset.state = "open";
+      if (searchInput) searchInput.focus();
+    });
+  }
+
+  function closeSearch() {
+    if (searchModal.hidden || searchModal.dataset.state === "closed") return;
+    searchModal.dataset.state = "closed";
+    searchModal.inert = true;
+    searchModal.setAttribute("aria-hidden", "true");
+
+    if (desktopSearchTrigger) desktopSearchTrigger.setAttribute("aria-expanded", "false");
+    if (mobileSearchTrigger) mobileSearchTrigger.setAttribute("aria-expanded", "false");
+
+    window.clearTimeout(searchCloseTimer);
+    searchCloseTimer = window.setTimeout(() => {
+      searchModal.hidden = true;
+      document.documentElement.classList.remove("modal-open");
+      document.body.classList.remove("modal-open");
+      setSearchInert(false);
+
+      if (searchOpener && typeof searchOpener.focus === "function") {
+        searchOpener.focus();
+      }
+      searchOpener = null;
+    }, 200);
+  }
+
+  if (desktopSearchTrigger) {
+    desktopSearchTrigger.addEventListener("click", () => openSearch(desktopSearchTrigger));
+  }
+  if (mobileSearchTrigger) {
+    mobileSearchTrigger.addEventListener("click", () => openSearch(mobileSearchTrigger));
+  }
+  if (searchCloseButton) {
+    searchCloseButton.addEventListener("click", closeSearch);
+  }
+
+  // 탭 클릭 전환
+  searchTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      searchTabs.forEach((t) => {
+        const isCurrent = t === tab;
+        t.classList.toggle("search-modal__tab--active", isCurrent);
+        t.setAttribute("aria-selected", String(isCurrent));
+      });
+    });
+  });
+
+  // 검색 태그 개별 삭제
+  searchTagRemoveButtons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const tag = e.target.closest(".search-modal__tag");
+      if (tag) tag.remove();
+    });
+  });
+
+  // 최근 검색어 전체 삭제
+  if (searchClearAllButton) {
+    searchClearAllButton.addEventListener("click", () => {
+      const tagsContainer = searchModal.querySelector(".search-modal__tags");
+      if (tagsContainer) tagsContainer.innerHTML = "";
+    });
+  }
+
+  // Escape 닫기 및 탭 트랩
+  document.addEventListener("keydown", (event) => {
+    if (searchModal.hidden || searchModal.dataset.state !== "open") return;
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeSearch();
+      return;
+    }
+
+    if (event.key === "Tab") {
+      const focusable = [
+        ...searchModal.querySelectorAll('button:not([disabled]), a[href], input:not([disabled]), [tabindex]:not([tabindex="-1"])')
+      ].filter((el) => el.getClientRects().length > 0);
+
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  });
+}
+
+initSearchModal();
 
 /* --- 히어로 섹션 풀페이지 스크롤 & 인디케이터 제어 --- */
 function initFullPageScroll() {
@@ -374,6 +479,7 @@ function initFullPageScroll() {
     "wheel",
     (event) => {
       if (menu.dataset.state === "open" || menu.dataset.state === "opening") return;
+      if (searchModal && searchModal.dataset.state === "open") return;
 
       if (isScrolling) {
         event.preventDefault();
@@ -396,6 +502,7 @@ function initFullPageScroll() {
 
   window.addEventListener("keydown", (event) => {
     if (menu.dataset.state === "open" || menu.dataset.state === "opening") return;
+    if (searchModal && searchModal.dataset.state === "open") return;
     if (document.activeElement?.closest("input, textarea, select")) return;
 
     if (event.key === "ArrowDown" || event.key === "PageDown") {
