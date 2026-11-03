@@ -19,14 +19,16 @@
     padding: var(--hero-top-inset) var(--hero-inset) var(--hero-content-pb);
   }
 
-  .hero__image-placeholder {
+  .hero__image {
     position: absolute;
     z-index: 0;
     inset: 0;
-    background: var(--color-hero-placeholder);
+    background-image: url("../../images/used/discovery-dt-68.jpg");
+    background-position: center;
+    background-size: cover;
   }
 
-  .hero__image-placeholder::after {
+  .hero__image::after {
     position: absolute;
     inset: 0;
     background: var(--overlay-hero);
@@ -41,6 +43,7 @@
     flex-direction: column;
     justify-content: flex-end;
     gap: var(--hero-copy-gap);
+    max-width: var(--hero-copy-width);
   }
 
   .hero__title {
@@ -56,18 +59,20 @@
   .hero__description {
     font-size: var(--fs-hero-description);
     font-weight: 400;
-    line-height: var(--lh-20);
+    line-height: var(--lh-hero-description);
     word-break: keep-all;
   }
 
   .hero__pagination {
-    position: relative;
-    z-index: 1;
+    position: fixed;
+    z-index: var(--z-floating);
+    inset-block-start: 50%;
+    inset-inline-end: var(--pagination-inset);
     display: flex;
     flex: 0 0 auto;
     flex-direction: column;
-    align-self: center;
     gap: var(--pagination-gap);
+    transform: translateY(-50%);
   }
 
   .hero__pagination-item {
@@ -87,7 +92,7 @@
     position: fixed;
     z-index: var(--z-floating);
     inset-block-end: var(--floating-inset);
-    inset-inline-end: var(--floating-inset);
+    inset-inline-end: var(--floating-inset-inline);
     display: flex;
     flex-direction: column;
     gap: var(--floating-gap);
@@ -104,29 +109,64 @@
     color: var(--color-text);
   }
 
-  .floating-actions__button svg {
+  .floating-actions__button img {
     width: var(--floating-icon);
     height: var(--floating-icon);
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: var(--icon-stroke);
   }
 
-  @media (min-width: 769px) {
+  .tabbar {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .hero__image {
+      background-image: url("../../images/used/discovery-mob-50.jpg");
+      background-position: var(--hero-mobile-bg-position);
+      background-size: var(--hero-mobile-bg-size);
+    }
+
     .hero__stage {
-      min-height: var(--hero-height);
+      padding-block-start: var(--hero-top-inset);
     }
 
-    .hero__title {
-      font-size: var(--fs-hero-title);
-      line-height: var(--lh-hero-title);
+    .hero__pagination {
+      inset-inline-end: var(--pagination-inset);
     }
 
-    .hero__description {
-      font-size: var(--fs-hero-description);
-      line-height: var(--lh-hero-description);
+    .tabbar {
+      position: fixed;
+      z-index: var(--z-tabbar);
+      inset: auto 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--tabbar-padding-block) var(--tabbar-padding-inline) calc(var(--tabbar-padding-block) + env(safe-area-inset-bottom, 0px));
+      color: var(--color-text-inverse);
+    }
+
+    .tabbar__item {
+      display: flex;
+      min-width: var(--tabbar-item-min);
+      min-height: var(--bottom-bar-height);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--tabbar-item-gap);
+      color: var(--color-text-inverse);
+      font-size: var(--fs-10);
+      line-height: var(--lh-16);
+      white-space: nowrap;
+    }
+
+    .tabbar__item img {
+      width: var(--tabbar-icon-size);
+      height: var(--tabbar-icon-size);
+    }
+
+    .tabbar__item--home img {
+      width: var(--tabbar-home-width);
+      height: var(--tabbar-home-height);
+      object-fit: contain;
     }
   }
 }

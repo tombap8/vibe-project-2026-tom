@@ -1,7 +1,6 @@
 @layer reset {
   html {
     box-sizing: border-box;
-    scrollbar-gutter: stable;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -48,6 +47,7 @@
 @layer base {
   body {
     min-width: var(--body-min-width);
+    overflow-x: clip;
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-sans);

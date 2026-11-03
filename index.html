@@ -15,8 +15,7 @@
       <div class="inner-box">
         <div class="part-box part-box--between header__content">
           <a class="brand" href="#hero" aria-label="Discovery Expedition 홈">
-            <span class="brand__name"><span class="brand__symbol" aria-hidden="true"></span>Discovery</span>
-            <span class="brand__subname">EXPEDITIONS</span>
+            <img src="./images/used/main-logo.svg" alt="">
           </a>
 
           <nav class="header__navigation" aria-label="상품 카테고리">
@@ -31,27 +30,16 @@
 
           <div class="part-box header__actions" aria-label="쇼핑 메뉴">
             <button class="icon-button" type="button" aria-label="검색">
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <circle cx="10.8" cy="10.8" r="6.8"></circle>
-                <path d="m16 16 4.2 4.2"></path>
-              </svg>
+              <img src="./images/used/search_icon_white_size28.21536056.svg" alt="">
             </button>
             <button class="icon-button" type="button" aria-label="장바구니">
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <path d="M5 8h14l-1 12H6L5 8Z"></path>
-                <path d="M9 9V6a3 3 0 0 1 6 0v3"></path>
-              </svg>
+              <img src="./images/used/cart_icon_white_size28.2a67abe7.svg" alt="">
             </button>
             <button class="icon-button" type="button" aria-label="마이페이지">
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <circle cx="12" cy="7.5" r="3.2"></circle>
-                <path d="M5.2 20a6.8 6.8 0 0 1 13.6 0"></path>
-              </svg>
+              <img src="./images/used/mypage_icon_white_size28.ecf13ebe.svg" alt="">
             </button>
             <button class="icon-button icon-button--menu" type="button" aria-label="전체 메뉴">
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <path d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
+              <img src="./images/used/menu_icon_white_size28.fd4f622b.svg" alt="">
             </button>
           </div>
         </div>
@@ -62,7 +50,7 @@
       <section class="outer-box outer-box--bleed hero" id="hero" aria-labelledby="hero-title">
         <div class="inner-box hero__inner">
           <div class="part-box hero__stage">
-            <div class="hero__image-placeholder" aria-hidden="true"></div>
+            <div class="hero__image" aria-hidden="true"></div>
             <div class="hero__copy">
               <h1 class="hero__title" id="hero-title">
                 <span>DISCOVER</span>
@@ -70,7 +58,7 @@
               </h1>
               <p class="hero__description">프리미엄 에센셜 다운과 윈터 슈즈가 만드는 균형 잡힌 비율</p>
             </div>
-            <div class="hero__pagination" aria-label="프로모션 슬라이드 1">
+            <div class="hero__pagination" role="group" aria-label="프로모션 슬라이드 1">
               <span class="hero__pagination-item hero__pagination-item--active"></span>
               <span class="hero__pagination-item"></span>
               <span class="hero__pagination-item"></span>
@@ -81,18 +69,35 @@
     </main>
 
     <aside class="floating-actions" aria-label="빠른 메뉴">
-      <button class="floating-actions__button" type="button" aria-label="최근 본 상품">
-        <svg aria-hidden="true" viewBox="0 0 24 24">
-          <path d="M12 3.5 14 9l5.5 2-5.5 2-2 5.5-2-5.5-5.5-2L10 9l2-5.5Z"></path>
-          <path d="m18.5 3 .6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6.6-1.7Z"></path>
-        </svg>
+      <button class="floating-actions__button" type="button" aria-label="채팅 문의">
+        <img src="./images/used/floating-btn-chat.svg" alt="">
       </button>
-      <a class="floating-actions__button" href="#hero" aria-label="맨 위로 이동">
-        <svg aria-hidden="true" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="8.5"></circle>
-          <path d="M12 7v5l3 2"></path>
-        </svg>
-      </a>
+      <button class="floating-actions__button" type="button" aria-label="최근 본 상품">
+        <img src="./images/used/floating-btn-recently-viewed-products.5d30f3d5.svg" alt="">
+      </button>
     </aside>
+
+    <nav class="tabbar" aria-label="모바일 빠른 메뉴">
+      <button class="tabbar__item" type="button" aria-label="카테고리">
+        <img src="./images/used/menu_icon_white_size28.fd4f622b.svg" alt="">
+        <span>카테고리</span>
+      </button>
+      <button class="tabbar__item" type="button" aria-label="검색">
+        <img src="./images/used/search_icon_white_size28.21536056.svg" alt="">
+        <span>검색</span>
+      </button>
+      <a class="tabbar__item tabbar__item--home" href="#hero" aria-label="홈" aria-current="page">
+        <img src="./images/used/main-logo.svg" alt="">
+        <span>홈</span>
+      </a>
+      <button class="tabbar__item" type="button" aria-label="장바구니">
+        <img src="./images/used/cart_icon_white_size28.2a67abe7.svg" alt="">
+        <span>장바구니</span>
+      </button>
+      <button class="tabbar__item" type="button" aria-label="마이페이지">
+        <img src="./images/used/mypage_icon_white_size28.ecf13ebe.svg" alt="">
+        <span>마이</span>
+      </button>
+    </nav>
   </body>
 </html>
