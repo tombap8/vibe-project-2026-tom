@@ -1,5 +1,6 @@
-@layer reset, tokens, base, layout, components, utilities;
+@layer reset, vendor, tokens, base, layout, components, utilities;
 
+@import "../vendor/swiper/swiper-bundle.min.css" layer(vendor);
 @import "./tokens.css" layer(tokens);
 @import "./base.css";
 @import "./layout.css";
@@ -8,4 +9,6 @@
 @import "./components/full-menu.css";
 @import "./components/search-modal.css";
 @import "./components/shorts.css";
+@import "./components/best-item.css";
+@import "./components/collection.css";
 @import "./utilities.css";

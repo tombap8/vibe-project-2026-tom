@@ -1,3 +1,6 @@
+import { initBestItem } from "./modules/best-item.js";
+import { initCollection } from "./modules/collection.js";
+
 const menuImages = [
   "discovery-mob-11.png",
   "discovery-mob-15.png",
@@ -950,3 +953,7 @@ async function initShortsSection() {
 }
 
 initShortsSection();
+
+initBestItem();
+
+initCollection();

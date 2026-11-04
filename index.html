@@ -6,7 +6,8 @@
     <title>Discovery Expedition | 공식 온라인몰</title>
     <meta name="description" content="디스커버리 익스페디션의 액티브한 라이프스타일과 겨울 컬렉션을 만나보세요.">
     <link rel="stylesheet" href="./css/main.css">
-    <script type="module" src="./js/main.js"></script>
+    <script defer src="./vendor/swiper/swiper-bundle.min.js"></script>
+<script type="module" src="./js/main.js"></script>
   </head>
   <body>
     <header class="outer-box outer-box--header">
@@ -262,6 +263,414 @@
                   </div>
                 </a>
               </article>
+            </div>
+          </div>
+        </div>
+      </section>
+    
+      <section class="outer-box section-best-item" id="best-item" aria-labelledby="best-item-title">
+        <div class="inner-box">
+          <div class="part-box part-box--column best-item__container">
+            <div class="best-item__header">
+              <p class="best-item__label">BEST ITEM</p>
+              <h2 class="best-item__title" id="best-item-title">가장 사랑받는 베스트 아이템</h2>
+            </div>
+
+            <div class="swiper best-item__swiper" data-js="best-item-swiper" aria-label="베스트 아이템 목록">
+              <div class="swiper-wrapper">
+                <!-- 1위 -->
+                <article class="swiper-slide best-card">
+                  <div class="best-card__thumb-wrap">
+                    <span class="best-card__rank" aria-label="1위">1</span>
+                    <a class="best-card__image-link" href="#best-item" aria-label="여성 픽토르U 구스다운 경량패딩 상세보기">
+                      <img class="best-card__image best-card__image--primary" src="./images/used/best-p1-main.png" alt="여성 픽토르U 구스다운 경량패딩 메인 이미지" width="675" height="900" loading="lazy">
+                      <img class="best-card__image best-card__image--hover" src="./images/used/best-p1-hover.png" alt="여성 픽토르U 구스다운 경량패딩 호버 이미지" width="675" height="900" loading="lazy">
+                    </a>
+                  </div>
+                  <div class="best-card__info">
+                    <a class="best-card__title-link" href="#best-item">
+                      <h3 class="best-card__name">여성 픽토르U 구스다운 경량패딩</h3>
+                    </a>
+                    <div class="best-card__price-row">
+                      <p class="best-card__price"><strong class="best-card__sale">179,000</strong></p>
+                      <button class="best-card__cart" type="button" aria-label="여성 픽토르U 구스다운 경량패딩 장바구니 담기"></button>
+                    </div>
+                    <ul class="best-card__colors" aria-label="색상">
+                      <li class="best-card__color best-card__color--white" title="화이트"></li>
+                      <li class="best-card__color best-card__color--ivory" title="아이보리"></li>
+                      <li class="best-card__color best-card__color--black best-card__color--selected" title="블랙"></li>
+                    </ul>
+                  </div>
+                </article>
+
+                <!-- 2위 -->
+                <article class="swiper-slide best-card">
+                  <div class="best-card__thumb-wrap">
+                    <span class="best-card__rank" aria-label="2위">2</span>
+                    <a class="best-card__image-link" href="#best-item" aria-label="유니 테크플리스 후드 자켓 상세보기">
+                      <img class="best-card__image best-card__image--primary" src="./images/used/best-p2-main.png" alt="유니 테크플리스 후드 자켓 메인 이미지" width="675" height="900" loading="lazy">
+                      <img class="best-card__image best-card__image--hover" src="./images/used/best-p2-hover.png" alt="유니 테크플리스 후드 자켓 호버 이미지" width="675" height="900" loading="lazy">
+                    </a>
+                  </div>
+                  <div class="best-card__info">
+                    <a class="best-card__title-link" href="#best-item">
+                      <h3 class="best-card__name">유니 테크플리스 후드 자켓</h3>
+                    </a>
+                    <div class="best-card__price-row">
+                      <p class="best-card__price"><strong class="best-card__sale">179,000</strong></p>
+                      <button class="best-card__cart" type="button" aria-label="유니 테크플리스 후드 자켓 장바구니 담기"></button>
+                    </div>
+                    <ul class="best-card__colors" aria-label="색상">
+                      <li class="best-card__color best-card__color--white best-card__color--selected" title="화이트"></li>
+                      <li class="best-card__color best-card__color--beige" title="베이지"></li>
+                      <li class="best-card__color best-card__color--lightblue" title="라이트 블루"></li>
+                      <li class="best-card__color best-card__color--darkgray" title="다크 그레이"></li>
+                      <li class="best-card__color-more" aria-label="추가 1개 색상">+1</li>
+                    </ul>
+                  </div>
+                </article>
+
+                <!-- 3위 -->
+                <article class="swiper-slide best-card">
+                  <div class="best-card__thumb-wrap">
+                    <span class="best-card__rank" aria-label="3위">3</span>
+                    <a class="best-card__image-link" href="#best-item" aria-label="여성 에어웰 올리아 숏패딩 상세보기">
+                      <img class="best-card__image best-card__image--primary" src="./images/used/best-p3-main.png" alt="여성 에어웰 올리아 숏패딩 메인 이미지" width="675" height="900" loading="lazy">
+                      <img class="best-card__image best-card__image--hover" src="./images/used/best-p3-hover.png" alt="여성 에어웰 올리아 숏패딩 호버 이미지" width="675" height="900" loading="lazy">
+                    </a>
+                  </div>
+                  <div class="best-card__info">
+                    <a class="best-card__title-link" href="#best-item">
+                      <h3 class="best-card__name">여성 에어웰 올리아 숏패딩</h3>
+                    </a>
+                    <div class="best-card__price-row">
+                      <p class="best-card__price"><strong class="best-card__sale">299,000</strong></p>
+                      <button class="best-card__cart" type="button" aria-label="여성 에어웰 올리아 숏패딩 장바구니 담기"></button>
+                    </div>
+                    <ul class="best-card__colors" aria-label="색상">
+                      <li class="best-card__color best-card__color--white best-card__color--selected" title="화이트"></li>
+                      <li class="best-card__color best-card__color--blue" title="블루"></li>
+                      <li class="best-card__color best-card__color--pink" title="핑크"></li>
+                      <li class="best-card__color best-card__color--lightgray" title="라이트 그레이"></li>
+                      <li class="best-card__color-more" aria-label="추가 1개 색상">+1</li>
+                    </ul>
+                  </div>
+                </article>
+
+                <!-- 4위 -->
+                <article class="swiper-slide best-card">
+                  <div class="best-card__thumb-wrap">
+                    <span class="best-card__rank" aria-label="4위">4</span>
+                    <a class="best-card__image-link" href="#best-item" aria-label="여성 레스터G 구스다운 롱패딩 상세보기">
+                      <img class="best-card__image best-card__image--primary" src="./images/used/best-p4-main.png" alt="여성 레스터G 구스다운 롱패딩 메인 이미지" width="675" height="900" loading="lazy">
+                      <img class="best-card__image best-card__image--hover" src="./images/used/best-p4-hover.png" alt="여성 레스터G 구스다운 롱패딩 호버 이미지" width="675" height="900" loading="lazy">
+                    </a>
+                  </div>
+                  <div class="best-card__info">
+                    <a class="best-card__title-link" href="#best-item">
+                      <h3 class="best-card__name">여성 레스터G 구스다운 롱패딩</h3>
+                    </a>
+                    <div class="best-card__price-row">
+                      <p class="best-card__price"><strong class="best-card__sale">439,000</strong></p>
+                      <button class="best-card__cart" type="button" aria-label="여성 레스터G 구스다운 롱패딩 장바구니 담기"></button>
+                    </div>
+                    <ul class="best-card__colors" aria-label="색상">
+                      <li class="best-card__color best-card__color--white" title="화이트"></li>
+                      <li class="best-card__color best-card__color--lightgray" title="라이트 그레이"></li>
+                      <li class="best-card__color best-card__color--darkgray" title="다크 그레이"></li>
+                      <li class="best-card__color best-card__color--black best-card__color--selected" title="블랙"></li>
+                    </ul>
+                  </div>
+                </article>
+
+                <!-- 5위 -->
+                <article class="swiper-slide best-card">
+                  <div class="best-card__thumb-wrap">
+                    <span class="best-card__rank" aria-label="5위">5</span>
+                    <a class="best-card__image-link" href="#best-item" aria-label="여성 에어웰 켈리 구스 미드패딩 상세보기">
+                      <img class="best-card__image best-card__image--primary" src="./images/used/best-p5-main.png" alt="여성 에어웰 켈리 구스 미드패딩 메인 이미지" width="675" height="900" loading="lazy">
+                      <img class="best-card__image best-card__image--hover" src="./images/used/best-p5-hover.png" alt="여성 에어웰 켈리 구스 미드패딩 호버 이미지" width="675" height="900" loading="lazy">
+                    </a>
+                  </div>
+                  <div class="best-card__info">
+                    <a class="best-card__title-link" href="#best-item">
+                      <h3 class="best-card__name">여성 에어웰 켈리 구스 미드패딩</h3>
+                    </a>
+                    <div class="best-card__price-row">
+                      <p class="best-card__price"><strong class="best-card__sale">519,000</strong></p>
+                      <button class="best-card__cart" type="button" aria-label="여성 에어웰 켈리 구스 미드패딩 장바구니 담기"></button>
+                    </div>
+                    <ul class="best-card__colors" aria-label="색상">
+                      <li class="best-card__color best-card__color--white" title="화이트"></li>
+                      <li class="best-card__color best-card__color--ivory" title="아이보리"></li>
+                      <li class="best-card__color best-card__color--darkgray" title="다크 그레이"></li>
+                      <li class="best-card__color best-card__color--black best-card__color--selected" title="블랙"></li>
+                    </ul>
+                  </div>
+                </article>
+
+                <!-- 6위 -->
+                <article class="swiper-slide best-card">
+                  <div class="best-card__thumb-wrap">
+                    <span class="best-card__rank" aria-label="6위">6</span>
+                    <a class="best-card__image-link" href="#best-item" aria-label="유니 에어웰 웰니스 숏패딩 상세보기">
+                      <img class="best-card__image best-card__image--primary" src="./images/used/best-p6-main.png" alt="유니 에어웰 웰니스 숏패딩 메인 이미지" width="675" height="900" loading="lazy">
+                      <img class="best-card__image best-card__image--hover" src="./images/used/best-p6-hover.png" alt="유니 에어웰 웰니스 숏패딩 호버 이미지" width="675" height="900" loading="lazy">
+                    </a>
+                  </div>
+                  <div class="best-card__info">
+                    <a class="best-card__title-link" href="#best-item">
+                      <h3 class="best-card__name">유니 에어웰 웰니스 숏패딩</h3>
+                    </a>
+                    <div class="best-card__price-row">
+                      <p class="best-card__price"><strong class="best-card__sale">339,000</strong></p>
+                      <button class="best-card__cart" type="button" aria-label="유니 에어웰 웰니스 숏패딩 장바구니 담기"></button>
+                    </div>
+                    <ul class="best-card__colors" aria-label="색상">
+                      <li class="best-card__color best-card__color--blue best-card__color--selected" title="블루"></li>
+                      <li class="best-card__color best-card__color--darkbrown" title="다크 브라운"></li>
+                      <li class="best-card__color best-card__color--sand" title="샌드"></li>
+                      <li class="best-card__color best-card__color--darkgray" title="다크 그레이"></li>
+                      <li class="best-card__color-more" aria-label="추가 1개 색상">+1</li>
+                    </ul>
+                  </div>
+                </article>
+
+                <!-- 7위 -->
+                <article class="swiper-slide best-card">
+                  <div class="best-card__thumb-wrap">
+                    <span class="best-card__rank" aria-label="7위">7</span>
+                    <a class="best-card__image-link" href="#best-item" aria-label="여성 테크플리스 후드 자켓 상세보기">
+                      <img class="best-card__image best-card__image--primary" src="./images/used/best-p7-main.png" alt="여성 테크플리스 후드 자켓 메인 이미지" width="675" height="900" loading="lazy">
+                      <img class="best-card__image best-card__image--hover" src="./images/used/best-p7-hover.png" alt="여성 테크플리스 후드 자켓 호버 이미지" width="675" height="900" loading="lazy">
+                    </a>
+                  </div>
+                  <div class="best-card__info">
+                    <a class="best-card__title-link" href="#best-item">
+                      <h3 class="best-card__name">여성 테크플리스 후드 자켓</h3>
+                    </a>
+                    <div class="best-card__price-row">
+                      <p class="best-card__price"><strong class="best-card__sale">169,000</strong></p>
+                      <button class="best-card__cart" type="button" aria-label="여성 테크플리스 후드 자켓 장바구니 담기"></button>
+                    </div>
+                    <ul class="best-card__colors" aria-label="색상">
+                      <li class="best-card__color best-card__color--white" title="화이트"></li>
+                      <li class="best-card__color best-card__color--beige" title="베이지"></li>
+                      <li class="best-card__color best-card__color--pink" title="핑크"></li>
+                      <li class="best-card__color best-card__color--black best-card__color--selected" title="블랙"></li>
+                    </ul>
+                  </div>
+                </article>
+
+                <!-- 8위 -->
+                <article class="swiper-slide best-card">
+                  <div class="best-card__thumb-wrap">
+                    <span class="best-card__rank" aria-label="8위">8</span>
+                    <a class="best-card__image-link" href="#best-item" aria-label="여성 에어웰 뉴올리아 숏패딩 (벨로) 상세보기">
+                      <img class="best-card__image best-card__image--primary" src="./images/used/best-p8-main.png" alt="여성 에어웰 뉴올리아 숏패딩 (벨로) 메인 이미지" width="675" height="900" loading="lazy">
+                      <img class="best-card__image best-card__image--hover" src="./images/used/best-p8-hover.png" alt="여성 에어웰 뉴올리아 숏패딩 (벨로) 호버 이미지" width="675" height="900" loading="lazy">
+                    </a>
+                  </div>
+                  <div class="best-card__info">
+                    <a class="best-card__title-link" href="#best-item">
+                      <h3 class="best-card__name">여성 에어웰 뉴올리아 숏패딩 (벨로)</h3>
+                    </a>
+                    <div class="best-card__price-row">
+                      <p class="best-card__price"><strong class="best-card__sale">309,000</strong></p>
+                      <button class="best-card__cart" type="button" aria-label="여성 에어웰 뉴올리아 숏패딩 (벨로) 장바구니 담기"></button>
+                    </div>
+                    <ul class="best-card__colors" aria-label="색상">
+                      <li class="best-card__color best-card__color--ivory" title="아이보리"></li>
+                      <li class="best-card__color best-card__color--darkbrown" title="다크 브라운"></li>
+                      <li class="best-card__color best-card__color--black best-card__color--selected" title="블랙"></li>
+                    </ul>
+                  </div>
+                </article>
+
+                <!-- 9위 -->
+                <article class="swiper-slide best-card">
+                  <div class="best-card__thumb-wrap">
+                    <span class="best-card__rank" aria-label="9위">9</span>
+                    <a class="best-card__image-link" href="#best-item" aria-label="여성 에어웰 켈리 구스 롱패딩 상세보기">
+                      <img class="best-card__image best-card__image--primary" src="./images/used/best-p9-main.png" alt="여성 에어웰 켈리 구스 롱패딩 메인 이미지" width="675" height="900" loading="lazy">
+                      <img class="best-card__image best-card__image--hover" src="./images/used/best-p9-hover.png" alt="여성 에어웰 켈리 구스 롱패딩 호버 이미지" width="675" height="900" loading="lazy">
+                    </a>
+                  </div>
+                  <div class="best-card__info">
+                    <a class="best-card__title-link" href="#best-item">
+                      <h3 class="best-card__name">여성 에어웰 켈리 구스 롱패딩</h3>
+                    </a>
+                    <div class="best-card__price-row">
+                      <p class="best-card__price"><strong class="best-card__sale">599,000</strong></p>
+                      <button class="best-card__cart" type="button" aria-label="여성 에어웰 켈리 구스 롱패딩 장바구니 담기"></button>
+                    </div>
+                    <ul class="best-card__colors" aria-label="색상">
+                      <li class="best-card__color best-card__color--white best-card__color--selected" title="화이트"></li>
+                      <li class="best-card__color best-card__color--ivory" title="아이보리"></li>
+                      <li class="best-card__color best-card__color--blue" title="블루"></li>
+                      <li class="best-card__color best-card__color--darkgray" title="다크 그레이"></li>
+                      <li class="best-card__color-more" aria-label="추가 2개 색상">+2</li>
+                    </ul>
+                  </div>
+                </article>
+
+                <!-- 10위 -->
+                <article class="swiper-slide best-card">
+                  <div class="best-card__thumb-wrap">
+                    <span class="best-card__rank" aria-label="10위">10</span>
+                    <a class="best-card__image-link" href="#best-item" aria-label="여성 에어웰 헤이니 숏패딩 (벨로) 상세보기">
+                      <img class="best-card__image best-card__image--primary" src="./images/used/best-p10-main.png" alt="여성 에어웰 헤이니 숏패딩 (벨로) 메인 이미지" width="675" height="900" loading="lazy">
+                      <img class="best-card__image best-card__image--hover" src="./images/used/best-p10-hover.png" alt="여성 에어웰 헤이니 숏패딩 (벨로) 호버 이미지" width="675" height="900" loading="lazy">
+                    </a>
+                  </div>
+                  <div class="best-card__info">
+                    <a class="best-card__title-link" href="#best-item">
+                      <h3 class="best-card__name">여성 에어웰 헤이니 숏패딩 (벨로)</h3>
+                    </a>
+                    <div class="best-card__price-row">
+                      <p class="best-card__price"><strong class="best-card__sale">309,000</strong></p>
+                      <button class="best-card__cart" type="button" aria-label="여성 에어웰 헤이니 숏패딩 (벨로) 장바구니 담기"></button>
+                    </div>
+                    <ul class="best-card__colors" aria-label="색상">
+                      <li class="best-card__color best-card__color--white best-card__color--selected" title="화이트"></li>
+                      <li class="best-card__color best-card__color--ivory" title="아이보리"></li>
+                      <li class="best-card__color best-card__color--beige" title="베이지"></li>
+                      <li class="best-card__color best-card__color--lightblue" title="라이트 블루"></li>
+                      <li class="best-card__color-more" aria-label="추가 8개 색상">+8</li>
+                    </ul>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="best-item__controls">
+              <div class="swiper-scrollbar" data-js="best-item-scrollbar"></div>
+            </div>
+
+            <div class="best-item__more-wrap">
+              <a class="best-item__more-btn" href="#best-item">
+                <span>전체보기</span>
+                <span class="best-item__more-arrow" aria-hidden="true">&gt;</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="outer-box section-collection" id="collection" aria-labelledby="collection-title">
+        <div class="inner-box">
+          <div class="part-box part-box--column collection__container">
+            <div class="collection__header">
+              <p class="collection__label">COLLECTION</p>
+              <h2 class="collection__title" id="collection-title">THE ACTIVE LAYER</h2>
+            </div>
+
+            <div class="collection__body">
+              <div class="swiper collection__feature" data-js="collection-feature" aria-label="컬렉션 화보">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <img class="collection__feature-image" src="./images/used/collection-feature-1.jpg" alt="베이지 카디건과 화이트 탱크톱을 입은 모델" width="1000" height="1000">
+                  </div>
+                  <div class="swiper-slide">
+                    <img class="collection__feature-image" src="./images/used/collection-feature-2.jpg" alt="그레이 하프집업 풀오버를 입은 모델" width="750" height="1000" loading="lazy">
+                  </div>
+                  <div class="swiper-slide">
+                    <img class="collection__feature-image" src="./images/used/collection-feature-3.jpg" alt="브라운 톤 트레이닝 셋업을 입은 모델" width="750" height="1000" loading="lazy">
+                  </div>
+                </div>
+                <div class="swiper-pagination"></div>
+              </div>
+
+              <div class="collection__products">
+                <div class="swiper collection__list" data-js="collection-products" aria-label="컬렉션 상품 목록">
+                  <div class="swiper-wrapper">
+                    <article class="swiper-slide collection-card">
+                      <a class="collection-card__link" href="#collection">
+                        <img class="collection-card__image" src="./images/used/collection-product-1.jpg" alt="" width="750" height="1000" loading="lazy">
+                        <span class="collection-card__name">여성 와플 긴팔티</span>
+                      </a>
+                      <div class="collection-card__price-row">
+                        <p class="collection-card__price"><strong class="collection-card__sale">69,000</strong></p>
+                        <button class="collection-card__cart" type="button" aria-label="여성 와플 긴팔티 장바구니 담기"></button>
+                      </div>
+                      <ul class="collection-card__colors" aria-label="색상">
+                        <li class="collection-card__color collection-card__color--ivory" title="아이보리"></li>
+                        <li class="collection-card__color collection-card__color--brown collection-card__color--selected" title="브라운"></li>
+                      </ul>
+                    </article>
+
+                    <article class="swiper-slide collection-card">
+                      <a class="collection-card__link" href="#collection">
+                        <img class="collection-card__image" src="./images/used/collection-product-2.jpg" alt="" width="750" height="1000" loading="lazy">
+                        <span class="collection-card__name">여성 세미크롭 기능성 긴팔티</span>
+                      </a>
+                      <div class="collection-card__price-row">
+                        <p class="collection-card__price">
+                          <del class="collection-card__origin">69,000</del>
+                          <strong class="collection-card__sale">48,300</strong>
+                        </p>
+                        <button class="collection-card__cart" type="button" aria-label="여성 세미크롭 기능성 긴팔티 장바구니 담기"></button>
+                      </div>
+                      <ul class="collection-card__colors" aria-label="색상">
+                        <li class="collection-card__color collection-card__color--ivory" title="아이보리"></li>
+                        <li class="collection-card__color collection-card__color--pink" title="핑크"></li>
+                        <li class="collection-card__color collection-card__color--black collection-card__color--selected" title="블랙"></li>
+                      </ul>
+                    </article>
+
+                    <article class="swiper-slide collection-card">
+                      <a class="collection-card__link" href="#collection">
+                        <img class="collection-card__image" src="./images/used/collection-product-3.jpg" alt="" width="750" height="1000" loading="lazy">
+                        <span class="collection-card__name">여성 에어 니트 트레이닝 스트레이트 팬츠</span>
+                      </a>
+                      <div class="collection-card__price-row">
+                        <p class="collection-card__price"><strong class="collection-card__sale">119,000</strong></p>
+                        <button class="collection-card__cart" type="button" aria-label="여성 에어 니트 트레이닝 스트레이트 팬츠 장바구니 담기"></button>
+                      </div>
+                      <ul class="collection-card__colors" aria-label="색상">
+                        <li class="collection-card__color collection-card__color--ivory collection-card__color--selected" title="아이보리"></li>
+                        <li class="collection-card__color collection-card__color--blue" title="블루"></li>
+                        <li class="collection-card__color collection-card__color--gray" title="그레이"></li>
+                        <li class="collection-card__color collection-card__color--black" title="블랙"></li>
+                      </ul>
+                    </article>
+
+                    <article class="swiper-slide collection-card">
+                      <a class="collection-card__link" href="#collection">
+                        <img class="collection-card__image" src="./images/used/collection-product-4.jpg" alt="" width="750" height="1000" loading="lazy">
+                        <span class="collection-card__name">여성 후리스 후드 집업 자켓</span>
+                      </a>
+                      <div class="collection-card__price-row">
+                        <p class="collection-card__price">
+                          <del class="collection-card__origin">149,000</del>
+                          <strong class="collection-card__sale">119,200</strong>
+                        </p>
+                        <button class="collection-card__cart" type="button" aria-label="여성 후리스 후드 집업 자켓 장바구니 담기"></button>
+                      </div>
+                      <ul class="collection-card__colors" aria-label="색상">
+                        <li class="collection-card__color collection-card__color--beige collection-card__color--selected" title="베이지"></li>
+                        <li class="collection-card__color collection-card__color--ivory" title="아이보리"></li>
+                      </ul>
+                    </article>
+
+                    <article class="swiper-slide collection-card">
+                      <a class="collection-card__link" href="#collection">
+                        <img class="collection-card__image" src="./images/used/collection-product-5.jpg" alt="" width="750" height="1000" loading="lazy">
+                        <span class="collection-card__name">여성 하이넥 기능성 긴팔티</span>
+                      </a>
+                      <div class="collection-card__price-row">
+                        <p class="collection-card__price"><strong class="collection-card__sale">59,000</strong></p>
+                        <button class="collection-card__cart" type="button" aria-label="여성 하이넥 기능성 긴팔티 장바구니 담기"></button>
+                      </div>
+                      <ul class="collection-card__colors" aria-label="색상">
+                        <li class="collection-card__color collection-card__color--black collection-card__color--selected" title="블랙"></li>
+                        <li class="collection-card__color collection-card__color--gray" title="그레이"></li>
+                      </ul>
+                    </article>
+                  </div>
+                </div>
+                <div class="swiper-scrollbar" data-js="collection-scrollbar"></div>
+              </div>
             </div>
           </div>
         </div>

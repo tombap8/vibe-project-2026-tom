@@ -157,6 +157,37 @@
   --duration-slow: 320ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 
+  --collection-pt: 76px;
+  --collection-pb: 80px;
+
+  --best-item-pt: 76px;
+  --best-item-pb: 80px;
+  --best-rank-size: 28px;
+  --best-rank-fs: var(--fs-14);
+  --best-card-gap: 16px;
+  --best-scrollbar-height: 2px;
+  --best-scrollbar-gap: 32px;
+  --best-more-btn-h: 44px;
+  --best-more-btn-w: 140px;
+  --collection-header-gap: 24px;
+  --collection-gap: 26px;
+  --collection-feature-width: 45.5%;
+  --collection-card-gap: 6px;
+  --collection-card-radius: 4px;
+  --collection-card-info-gap: 8px;
+  --collection-color-size: 16px;
+  --collection-color-gap: 10px;
+  --collection-scrollbar-height: 2px;
+  --collection-scrollbar-gap: 16px;
+  --collection-cart-size: 20px;
+  --swatch-ivory: #eee9e0;
+  --swatch-beige: #d8c8b0;
+  --swatch-brown: #4a2f12;
+  --swatch-pink: #e8b4bc;
+  --swatch-blue: #6f94b3;
+  --swatch-gray: #bcc7c9;
+  --swatch-black: #1c1210;
+
   --header-bg: var(--overlay-header);
 }
 
@@ -199,6 +230,17 @@
     --floating-inset-inline: 12px;
     --floating-icon: 56px;
     --pagination-inset: 20px;
+    --collection-pt: 32px;
+    --collection-pb: calc(var(--bottom-bar-height) + 40px);
+
+    --best-item-pt: 48px;
+    --best-item-pb: 40px;
+    --best-rank-size: 24px;
+    --best-rank-fs: var(--fs-12);
+    --best-card-gap: 10px;
+    --collection-header-gap: 16px;
+    --collection-gap: 16px;
+    --collection-card-gap: 8px;
     --header-bg: var(--overlay-header);
   }
 }

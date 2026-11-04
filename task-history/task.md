@@ -126,3 +126,28 @@
   - 메인 웹 사이트 화면의 각 카드 내부에서도 영상이 소리 없이(`autoplay=1&mute=1&controls=0&loop=1`) 무한 반복 자동 재생되도록 인라인 `iframe` 구성 (`pointer-events: none`으로 클릭 방해 없음).
   - 카드 클릭 시 해당 영상과 상품 정보가 세로형 모달 플레이어(`.shorts-modal`)로 매칭되어 확대 재생 지원.
   - 레퍼런스 화면덤프(`dt.png` / `mob.png`)와 100% 일치하도록 `data/yt-shorts.json` 및 `index.html`의 시청자 수 뱃지 수치 정밀 동기화 (38, 40, 33, 26, 24).
+
+### 2026-11-04 — 컬렉션(THE ACTIVE LAYER) 섹션 구현 (Swiper)
+- 숏츠 섹션 아래에 section.section-collection을 추가했다. 3단 계층(.outer-box > .inner-box > .part-box)을 따른다.
+- Swiper 11.2.10을 로컬 번들(endor/swiper/)로 포함하고 CSS는 @layer vendor로 격리했다. JS는 index.html에서 defer 로드한다.
+- 좌측 대형 이미지: Swiper 3장(loop, 자동재생 4초, 페이지네이션 점, reduced-motion 시 자동재생 해제).
+- 우측 상품 목록: Swiper 5장(데스크톱 2장 노출 + 스크롤바 드래그, 모바일 2.7장 노출 프리모드). 상품명, 정가/할인가, 색상 스와치 포함.
+- 모바일: 대형 이미지는 좌우 풀블리드, 상품 리스트는 우측 끝까지 이어지며 장바구니 아이콘 노출.
+- 이미지는 images/used/collection-feature-1~3.jpg, collection-product-1~5.jpg(1000px 이하 JPEG로 리사이즈).
+- 전체 메뉴: enderCategory가 CSS 클래스와 어긋나던 문제 수정, 메뉴 열림 시 menu-open 클래스 토글 복구.
+- 풀페이지 스크롤: 관성 휠로 인한 2칸 역점프 방지(휠 제스처 간격 판정).
+
+### 2026-11-04 — 베스트 아이템(BEST ITEM) 카드형 리스트 섹션 구현 (Swiper)
+- 숏츠 섹션과 컬렉션 섹션 사이에 section.section-best-item을 추가했다. 3단 계층(.outer-box > .inner-box > .part-box)을 엄수했다.
+- Swiper 플러그인을 활용하여 데스크탑 화면 기준 5개 아이템이 한 화면에 노출되고, 우측에 5개가 더 대기하는 총 10개의 카드형 리스트를 구현했다.
+- 모델 착용 이미지에 마우스 오버(hover) 시 옷만 있는 제품컷으로 부드럽게 전환(opacity 트랜지션)되도록 구현했다. (키보드 포커스 시에도 :focus-within으로 동일하게 접근성 지원)
+- 1~10위 블랙 스퀘어 랭킹 뱃지, 상품명, 가격, 컬러 스와치(선택 컬러 아웃라인 링, +1 뱃지), 모바일 전용 장바구니 아이콘을 구성했다.
+- 하단에 가로 전체 너비의 Swiper 드래그 스크롤바 및 반응형 '전체보기' 버튼(데스크톱 박스 버튼 / 모바일 화살표 링크)을 연동했다.
+- 반응형 뷰포트 대응: 데스크톱 5개 노출, 모바일 2.4개 노출 프리모드 가로 스와이프 지원.
+- 이미지는 images/img-dt의 리소스를 기반으로 images/used/best-1~10-model.jpg 및 est-1~10-product.jpg로 최적화 생성 및 매칭했다.
+
+### 2026-11-04 — 베스트 아이템 10개 데이터 products_extracted.json 기반 전면 업데이트
+- data/products_extracted.json의 상위 10개(rank 1~10) 실제 공식몰 크롤링 상품 데이터를 추출하여 베스트 상품 섹션에 전면 반영했다.
+- 각 상품의 공식 메인/호버 이미지(각 2종, 총 20장)를 images/used/best-p1~10-main.png, est-p1~10-hover.png로 다운로드 및 로컬 캐시하여 안정적인 렌더링을 보장했다.
+- 1위~10위 실제 상품명, 가격, 색상 스와치 목록(화이트, 아이보리, 블랙, 베이지, 라이트블루, 핑크, 다크그레이 등) 및 +1, +2, +8 추가 색상 뱃지를 정확히 매핑했다.
+- 마우스 오버 시 실제 디스커버리 제품컷(호버 이미지)으로의 전환 효과를 완벽하게 유지했다.
