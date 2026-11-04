@@ -18,6 +18,7 @@
   --color-on-primary: #ffffff;
   --chip-fill-on-dark: rgb(255 255 255 / 20%);
   --overlay-hero: linear-gradient(180deg, rgb(0 0 0 / 0) 0.18%, rgb(0 0 0 / 56%) 99.82%);
+  --overlay-header: linear-gradient(180deg, rgb(0 0 0 / 40%) 0%, rgb(0 0 0 / 0) 100%);
   --overlay-header-m: linear-gradient(0deg, rgb(0 0 0 / 0) 0%, rgb(0 0 0 / 56%) 100%);
 
   --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
@@ -156,7 +157,7 @@
   --duration-slow: 320ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 
-  --header-bg: transparent;
+  --header-bg: var(--overlay-header);
 }
 
 @media (max-width: 1279px) {
@@ -198,6 +199,6 @@
     --floating-inset-inline: 12px;
     --floating-icon: 56px;
     --pagination-inset: 20px;
-    --header-bg: var(--overlay-header-m);
+    --header-bg: var(--overlay-header);
   }
 }
