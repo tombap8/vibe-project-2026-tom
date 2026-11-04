@@ -54,6 +54,8 @@ const menuCategories = {
   ],
 };
 
+const menuFeatures = ["프로모션", "트렌드", "RE MARKET"];
+
 const menu = document.querySelector(".full-menu");
 const menuContent = document.querySelector(".full-menu__content");
 const menuTabs = [...document.querySelectorAll(".full-menu__tab")];
@@ -106,40 +108,59 @@ function renderCategory(categoryName) {
   const sections = menuCategories[categoryName] ?? [];
   menuContent.innerHTML = "";
 
+  const sectionList = document.createElement("div");
+  sectionList.className = "full-menu__sections";
+
   sections.forEach((section, sectionIndex) => {
     const sectionElement = document.createElement("section");
     sectionElement.className = "full-menu__section";
 
-    const titleElement = document.createElement("h3");
-    titleElement.className = "full-menu__heading";
+    const heading = document.createElement("h3");
+    heading.className = "full-menu__section-heading";
 
-    const titleLink = document.createElement("a");
-    titleLink.className = "full-menu__heading-link";
-    titleLink.href = "#hero";
-    titleLink.textContent = section.title;
+    const title = document.createElement("span");
+    title.textContent = section.title;
 
-    const arrowIcon = document.createElement("span");
-    arrowIcon.className = "full-menu__arrow";
-    arrowIcon.innerHTML = `
-      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M6 3.5L10.5 8L6 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    `;
+    const viewAll = document.createElement("a");
+    viewAll.className = "full-menu__view-all";
+    viewAll.href = "#hero";
+    viewAll.append(document.createTextNode("전체보기"));
+    viewAll.insertAdjacentHTML(
+      "beforeend",
+      '<svg aria-hidden="true" viewBox="0 0 16 16"><path d="m6 3.5 4.5 4.5L6 12.5"></path></svg>'
+    );
 
-    titleLink.appendChild(arrowIcon);
-    titleElement.appendChild(titleLink);
+    heading.append(title, viewAll);
 
-    const listElement = document.createElement("div");
-    listElement.className = "full-menu__grid";
+    const items = document.createElement("div");
+    items.className = "full-menu__items";
 
     section.items.forEach((item, itemIndex) => {
-      const globalIndex = sectionIndex * 3 + itemIndex;
-      listElement.appendChild(createMenuItem(item, globalIndex));
+      items.appendChild(createMenuItem(item, sectionIndex * 3 + itemIndex));
     });
 
-    sectionElement.append(titleElement, listElement);
-    menuContent.appendChild(sectionElement);
+    sectionElement.append(heading, items);
+    sectionList.appendChild(sectionElement);
   });
+
+  const features = document.createElement("div");
+  features.className = "full-menu__features";
+  menuFeatures.forEach((label) => {
+    const feature = document.createElement("a");
+    feature.className = "full-menu__feature";
+    feature.href = "#hero";
+
+    const image = document.createElement("span");
+    image.className = "full-menu__feature-image";
+
+    const text = document.createElement("span");
+    text.textContent = label;
+
+    feature.append(image, text);
+    features.appendChild(feature);
+  });
+
+  menuContent.append(sectionList, features);
 }
 
 function activateTab(targetTab) {
@@ -215,6 +236,8 @@ function openMenu(trigger) {
   menu.removeAttribute("inert");
   menu.dataset.state = "opening";
   menu.setAttribute("aria-hidden", "false");
+  document.documentElement.classList.add("menu-open");
+  document.body.classList.add("menu-open");
 
   lockBackground(true);
 
@@ -236,6 +259,8 @@ function closeMenu() {
   mobileMenuLabel.textContent = "카테고리";
 
   menu.dataset.state = "closing";
+  document.documentElement.classList.remove("menu-open");
+  document.body.classList.remove("menu-open");
 
   const duration = mobileViewport.matches ? 360 : 220;
 
@@ -269,7 +294,7 @@ menu.addEventListener("click", (event) => {
   const target = event.target;
   if (!(target instanceof HTMLElement)) return;
 
-  if (target.closest(".full-menu__item, .full-menu__heading-link")) {
+  if (target.closest(".full-menu__item, .full-menu__view-all, .full-menu__feature")) {
     closeMenu();
   }
 });
@@ -498,6 +523,8 @@ function initFullPageScroll() {
   let isHeroSnapActive = true;
   let lastScrollTime = 0;
   const SCROLL_COOLDOWN = 850;
+  const WHEEL_GESTURE_GAP = 120;
+  let lastWheelTime = 0;
 
   // 헤더 스타일 실시간 동기화 (1,2,3페이지: 다크, 3페이지 하단: 화이트 반전)
   function updateHeaderTheme(currentScrollY) {
@@ -637,7 +664,10 @@ function initFullPageScroll() {
       if (shortsModal && shortsModal.dataset.state === "open") return;
 
       const now = Date.now();
-      // 스크롤 이동 중이거나 쿨다운 기간에는 모든 휠 이벤트 인터셉트하여 이중 점프 버그 방지!
+      // 트랙패드 관성 휠은 쿨다운 이후에도 이어지므로, 이벤트 간격이 끊긴 뒤의 새 제스처만 페이지 이동으로 인정한다.
+      const isNewGesture = now - lastWheelTime > WHEEL_GESTURE_GAP;
+      lastWheelTime = now;
+
       if (isScrolling || (now - lastScrollTime < SCROLL_COOLDOWN)) {
         event.preventDefault();
         return;
@@ -653,12 +683,19 @@ function initFullPageScroll() {
 
       // 1. 세번째 페이지 하단(일반 스크롤 영역)에 있는 경우
       if (currentY >= shortsTop - 20) {
-        // 일반 스크롤 최상단에서 위로 휠을 올렸을 때 -> 3번째 페이지만 정확하게 이동!
-        if (delta < 0 && currentY <= shortsTop + 15) {
+        // 위로 휠 시 이번 이동이 숏츠 최상단을 넘어서면 일반 스크롤을 막고 3번째 페이지로만 정확히 이동
+        if (delta < 0 && currentY + delta <= shortsTop + 15) {
           event.preventDefault();
-          scrollToSection(heroSections.length - 1);
+          if (isNewGesture || currentY <= shortsTop + 15) {
+            scrollToSection(heroSections.length - 1);
+          }
         }
-        // 그 외 영역에서는 브라우저 고유의 자연스러운 일반 스크롤 작동
+        return;
+      }
+
+      // 관성 휠이 이어지는 동안에는 히어로 페이지 추가 이동 차단
+      if (!isNewGesture) {
+        event.preventDefault();
         return;
       }
 

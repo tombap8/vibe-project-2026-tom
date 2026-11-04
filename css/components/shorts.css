@@ -1,5 +1,7 @@
 @layer components {
   .section-shorts {
+    min-height: 100vh;
+    min-height: 100dvh;
     padding-top: calc(var(--header-h-pc) + 40px);
     padding-bottom: 60px;
     background: var(--color-bg);
