@@ -23,12 +23,21 @@
    - 배경 스크롤 잠금(`inert`), sticky 분류 탭, 서브 카테고리 및 상품 썸네일 그리드 구현.
 4. **상단 검색 모달 (`search-modal`)**:
    - 상단/하단 검색 돋보기 버튼 클릭 시 화면 전체를 덮는 fixed 모달 구현.
-   - 상단 검색창 + 닫기(X) 라인 고정(`sticky`), 하단 콘텐츠 독립 스크롤.
    - 최근 검색어(개별 삭제, 전체삭제 지원) 및 1~10위 인기 검색어 랭킹 리스트 구현.
-   - 이번주 BEST 탭 및 5종 상품 카드(랭킹 뱃지, 가격, 색상 스와치 칩, 좋아요/댓글 수) 구현.
-   - "온라인 공식몰 회원 특별 혜택" 테크니컬 그리드 프로모션 배너 구현.
-   - 모바일 미디어쿼리 대응: 인기 검색어 바로 아래에 혜택 배너 배치, 상품 카드 가로 스와이프 탐색 최적화.
-   - ESC 키 닫기, 키보드 Tab 트랩, 포커스 복원 및 메인 스크롤 인터셉트 방지.
+   - 이번주 BEST 탭 및 5종 상품 카드, 온라인 회원 특별 혜택 배너 구현.
+5. **쇼츠 섹션 (`section.section-shorts`)**:
+   - 비디오 인라인 무음 자동 재생 및 모달 플레이어.
+6. **컬렉션 섹션 (`section.section-collection`)**:
+   - 좌측 3장 자동 롤링 히어로 + 우측 5종 상품 스와이퍼 연동.
+7. **베스트 아이템 섹션 (`section.section-best-item`)**:
+   - `products_extracted.json` 기반 10개 상품 카드 렌더링, 인물-옷 호버 전환 및 스와이퍼.
+8. **푸터 (`footer.outer-box--footer`)**:
+   - 회사 정보 아코디언 토글, 언어 선택(ENGLISH/KOREAN) 및 FAMILY SITE 8개 브랜드 드롭다운.
+9. **디스커버러의 취향 파트 (`section.section-trend-pick`)**:
+   - `data/trend_pick_*.json` 4개 파일 매칭 (숏패딩 3개, 경량패딩 8개, 경량자켓 9개, 후드티 5개).
+   - 데스크톱 기준 한 화면 4개 카드 그리드 및 초과 데이터 시 Swiper 슬라이딩 적용 (`watchOverflow: true`).
+   - 4개 카테고리 알약 탭 전환 시 동적 카드 렌더링 및 스와이퍼 갱신.
+   - 인플루언서 스타일 이미지(좌하단 `@username` 오버레이) + 하단 2개 연관 상품(썸네일, 상품명, 가격) 구조.
 
 ## 주요 파일
 
@@ -40,9 +49,19 @@
 - `css/components/hero.css`: 히어로 1~3페이지 및 인디케이터, 플로팅 버튼, 탭바 스타일
 - `css/components/full-menu.css`: 전체 메뉴 모달 스타일
 - `css/components/search-modal.css`: 검색 화면 고정 오버레이 모달 스타일
+- `css/components/shorts.css`: 디스커버리 숏츠 섹션 스타일
+- `css/components/best-item.css`: 베스트 아이템 10선 카드 리스트 스타일
+- `css/components/collection.css`: 컬렉션(THE ACTIVE LAYER) 섹션 스타일
+- `css/components/trend-pick.css`: 디스커버러의 취향(TREND PICK) 섹션 스타일
+- `css/components/footer.css`: 푸터 및 회사정보 아코디언/드롭다운 스타일
 - `css/utilities.css`: 접근성 유틸리티 (.visually-hidden 등)
 - `css/main.css`: CSS 레이어 관리 및 엔트리
-- `js/main.js`: 전체 메뉴, 풀페이지 스크롤, 검색 모달 상호작용 제어 엔트리
+- `js/main.js`: 메인 엔트리 및 공통 상호작용 제어
+- `js/modules/best-item.js`: 베스트 아이템 Swiper 제어
+- `js/modules/collection.js`: 컬렉션 Swiper(좌측 3장 자동롤링 + 우측 5장 상품) 제어
+- `js/modules/trend-data.js`: 트렌드 픽 4개 카테고리 매칭 데이터
+- `js/modules/trend-pick.js`: 트렌드 픽 탭 전환 및 Swiper 동적 제어
+- `js/modules/footer.js`: 푸터 아코디언, 언어 및 패밀리사이트 드롭다운 제어
 
 ## 다음 작업 시 유의사항
 
@@ -153,9 +172,30 @@
 - 마우스 오버 시 실제 디스커버리 제품컷(호버 이미지)으로의 전환 효과를 완벽하게 유지했다.
 
 ### 2026-11-04 — 푸터(Footer) 반응형 구현 및 회사정보 아코디언 / 드롭다운 메뉴 연동
-- \ooter.outer-box.outer-box--footer\ 태그를 사용하여 \main\ 하단에 3단 레이아웃 계층(.outer-box > .inner-box > .part-box)으로 푸터를 구현했다.
+- `footer.outer-box.outer-box--footer` 태그를 사용하여 `main` 하단에 3단 레이아웃 계층(`.outer-box` > `.inner-box` > `.part-box`)으로 푸터를 구현했다.
 - 회사정보 아코디언: '(주) 에프앤에프 사업자 정보' 클릭 시 대표자, 사업자 등록번호, 사업자정보 확인 링크, 통신판매업 신고번호, 책임자, 반송처, 고객센터 및 운영시간 상세 정보가 부드럽게 펼쳐지고 접히도록 구현했다. (화살표 회전 및 aria-expanded 연동)
 - KOREAN 메뉴: 클릭 시 'ENGLISH/KOREAN' 선택 레이어가 노출되며, 선택 시 텍스트가 실시간 갱신되도록 구현했다. (데스크탑/모바일 동기화)
 - FAMILY SITE 메뉴: 클릭 시 MLB, MLB KIDS, DUVETICA, SERGIO TACCHINI, SUPRA, BANILA CO, COLLECTED, F&F 8개 패밀리 브랜드 리스트 드롭다운 레이어가 노출되도록 구현했다.
 - 외부 영역 클릭 및 Escape 키 지원으로 드롭다운 닫힘 인터랙션을 완성했다.
 - 공식 SNS 4종(인스타그램, 인스타키즈, 유튜브, 페이스북), 앱스토어/구글플레이 링크, 모바일용 '디스커버리 APP ↓' 버튼, SGI서울보증 및 ISMS 인증 마크를 화면덤프와 1:1로 정확하게 배치했다.
+
+### 2026-11-04 — 디스커버러의 취향(TREND PICK) 섹션 구현 (Swiper & 데이터 매칭)
+- `spec-kit/AGENTS.md`의 표준 배치 규약에 맞춰 컬렉션 섹션 하단, 푸터 상단에 `section.outer-box.section-trend-pick#trend-pick`을 추가했다.
+- `data/trend_pick_*.json` 4개 파일의 크롤링 데이터를 정밀 대조 및 추출하여 `js/modules/trend-data.js`로 모듈화했다.
+  - 숏패딩: 3개 픽 (`data/trend_pick_extracted.json`)
+  - 경량패딩: 8개 픽 (`data/trend_pick_light_padding.json`)
+  - 경량자켓: 9개 픽 (`data/trend_pick_light_jacket.json`)
+  - 후드티: 5개 픽 (`data/trend_pick_hoodie.json`)
+- 총 48개의 인플루언서 스타일 컷 및 연관 상품 썸네일 이미지를 `images/used/trend/` 디렉터리에 다운로드 및 캐싱하여 안정적인 오프라인 렌더링을 보장했다.
+- **반응형 Swiper 및 한 화면 카드 수 제어 (`watchOverflow`)**:
+  - 데스크톱: 한 화면에 4개의 카드가 배치되는 그리드 구조 (`slidesPerView: 4`, `spaceBetween: 20`).
+  - 첫 번째 카테고리인 '숏패딩'은 데이터가 3개뿐이므로, `watchOverflow: true` 설정으로 슬라이드 이동을 잠그고 1~3번째 슬롯에 깔끔하게 정적 배치되도록 처리했다.
+  - '경량패딩'(8개), '경량자켓'(9개), '후드티'(5개)처럼 카드 개수가 화면 수용량(4개)을 초과하는 탭 선택 시 Swiper가 자동으로 활성화되어 좌우 부드러운 드래그/스와이프 탐색을 지원한다.
+  - 모바일: `slidesPerView: 1.25`, `spaceBetween: 12`로 설정하여 첫 카드가 주를 이루고 다음 카드가 우측에 살짝 보이는 피킹(peek) 효과를 구현했다.
+- **카테고리 알약 탭 상호작용**:
+  - '숏패딩', '경량패딩', '경량자켓', '후드티' 4개 탭 버튼을 구성하고 클릭 시 활성 스타일(`background: #000; color: #fff;`) 및 `aria-selected` 속성이 즉각 갱신되도록 구현했다.
+  - 탭 전환 시 선택된 카테고리의 카드 리스트를 동적으로 재렌더링하고 `swiper.update()` 및 `swiper.slideTo(0, 0)`으로 슬라이더 상태를 동기화했다.
+- **카드 컴포넌트 디자인**:
+  - 상단 1:1 정사각 인플루언서 스타일 이미지 + 좌측 하단 `@username` 흰색 오버레이 텍스트 (가독성을 위한 드롭 섀도우 적용).
+  - 하단 2개 연관 상품 리스트 (좌측 56x72px 상품 썸네일 + 우측 상품명 및 볼드 가격).
+- Microsoft Edge Headless 브라우저를 통해 데스크톱(1440px) 및 모바일(390px) 전 뷰포트에서 시각적 렌더링과 탭 전환 상호작용을 최종 검증했다.

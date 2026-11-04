@@ -1,6 +1,7 @@
 import { initFooter } from "./modules/footer.js";
 import { initBestItem } from "./modules/best-item.js";
 import { initCollection } from "./modules/collection.js";
+import { initTrendPick } from "./modules/trend-pick.js";
 
 const menuImages = [
   "discovery-mob-11.png",
@@ -958,5 +959,7 @@ initShortsSection();
 initBestItem();
 
 initCollection();
+
+initTrendPick();
 
 initFooter();
