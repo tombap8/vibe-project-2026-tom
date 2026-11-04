@@ -98,247 +98,320 @@ function createMenuItem(label, index) {
   itemLabel.className = "full-menu__item-label";
   itemLabel.textContent = label;
 
-  link.setAttribute("aria-label", `${label} 메뉴`);
   link.append(image, itemLabel);
   return link;
 }
 
-function createMenuSection(section, sectionIndex) {
-  const sectionElement = document.createElement("section");
-  sectionElement.className = "full-menu__section";
+function renderCategory(categoryName) {
+  const sections = menuCategories[categoryName] ?? [];
+  menuContent.innerHTML = "";
 
-  const heading = document.createElement("h3");
-  heading.className = "full-menu__section-heading";
+  sections.forEach((section, sectionIndex) => {
+    const sectionElement = document.createElement("section");
+    sectionElement.className = "full-menu__section";
 
-  const title = document.createElement("span");
-  title.textContent = section.title;
+    const titleElement = document.createElement("h3");
+    titleElement.className = "full-menu__heading";
 
-  const viewAll = document.createElement("a");
-  viewAll.className = "full-menu__view-all";
-  viewAll.href = "#hero";
-  viewAll.setAttribute("aria-label", `${section.title} 전체보기`);
-  viewAll.append(document.createTextNode("전체보기"));
+    const titleLink = document.createElement("a");
+    titleLink.className = "full-menu__heading-link";
+    titleLink.href = "#hero";
+    titleLink.textContent = section.title;
 
-  const arrow = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  arrow.setAttribute("viewBox", "0 0 24 24");
-  arrow.setAttribute("aria-hidden", "true");
-  const arrowPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  arrowPath.setAttribute("d", "m9 5 7 7-7 7");
-  arrow.append(arrowPath);
-  viewAll.append(arrow);
-  heading.append(title, viewAll);
+    const arrowIcon = document.createElement("span");
+    arrowIcon.className = "full-menu__arrow";
+    arrowIcon.innerHTML = `
+      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M6 3.5L10.5 8L6 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
 
-  const items = document.createElement("div");
-  items.className = "full-menu__items";
-  section.items.forEach((label, itemIndex) => {
-    items.append(createMenuItem(label, sectionIndex + itemIndex));
+    titleLink.appendChild(arrowIcon);
+    titleElement.appendChild(titleLink);
+
+    const listElement = document.createElement("div");
+    listElement.className = "full-menu__grid";
+
+    section.items.forEach((item, itemIndex) => {
+      const globalIndex = sectionIndex * 3 + itemIndex;
+      listElement.appendChild(createMenuItem(item, globalIndex));
+    });
+
+    sectionElement.append(titleElement, listElement);
+    menuContent.appendChild(sectionElement);
   });
-
-  sectionElement.append(heading, items);
-  return sectionElement;
 }
 
-function renderMenu(category) {
-  const sections = menuCategories[category];
-  const sectionList = document.createElement("div");
-  sectionList.className = "full-menu__sections";
-  sections.forEach((section, index) => {
-    sectionList.append(createMenuSection(section, index));
+function activateTab(targetTab) {
+  menuTabs.forEach((tab) => {
+    const isSelected = tab === targetTab;
+    tab.classList.toggle("full-menu__tab--active", isSelected);
+    tab.setAttribute("aria-selected", String(isSelected));
+    tab.tabIndex = isSelected ? 0 : -1;
   });
 
-  const content = [sectionList];
-  if (category === "여성") {
-    const features = document.createElement("div");
-    features.className = "full-menu__features";
-    ["프로모션", "트렌드", "RE MARKET"].forEach((label, index) => {
-      const feature = document.createElement("a");
-      feature.className = "full-menu__feature";
-      feature.href = "#hero";
-      feature.setAttribute("aria-label", `${label} 메뉴`);
-
-      const image = document.createElement("img");
-      image.className = "full-menu__feature-image";
-      image.src = `./images/menu/${menuImages[index]}`;
-      image.alt = "";
-      image.loading = "lazy";
-
-      const featureLabel = document.createElement("span");
-      featureLabel.textContent = label;
-      feature.append(image, featureLabel);
-      features.append(feature);
-    });
-    content.push(features);
-  }
-
-  menuContent.replaceChildren(...content);
-  const activeTab = menuTabs.find((tab) => tab.dataset.category === category);
-  menuContent.setAttribute("aria-labelledby", activeTab.id);
+  const categoryName = targetTab.textContent.trim();
+  renderCategory(categoryName);
   menuContent.scrollTop = 0;
 }
 
-function selectMenuTab(tab, moveFocus = false) {
-  menuTabs.forEach((item) => {
-    const isActive = item === tab;
-    item.classList.toggle("full-menu__tab--active", isActive);
-    item.setAttribute("aria-selected", String(isActive));
-    item.tabIndex = isActive ? 0 : -1;
-  });
-  renderMenu(tab.dataset.category);
-  if (moveFocus) tab.focus();
+function setFocusTrap(container) {
+  const focusable = container.querySelectorAll(
+    'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  );
+  return [...focusable];
 }
 
-function setBackgroundInert(isInert) {
-  pageHeader.inert = isInert;
-  pageMain.inert = isInert;
-  floatingActions.inert = isInert;
-  if (paginationNav) paginationNav.inert = isInert;
-  tabbar.inert = !mobileViewport.matches;
-  tabbar.querySelectorAll(":scope > :not(.tabbar__item--category)").forEach((item) => {
-    item.inert = isInert;
+function lockBackground(isLocked) {
+  const elements = [pageMain, floatingActions, paginationNav].filter(Boolean);
+  elements.forEach((el) => {
+    if (isLocked) {
+      el.setAttribute("inert", "");
+      el.setAttribute("aria-hidden", "true");
+    } else {
+      el.removeAttribute("inert");
+      el.removeAttribute("aria-hidden");
+    }
   });
+
+  if (mobileViewport.matches) {
+    if (tabbar) {
+      const tabbarItems = [...tabbar.querySelectorAll(".tabbar__item")];
+      tabbarItems.forEach((item) => {
+        if (!item.classList.contains("tabbar__item--category")) {
+          if (isLocked) {
+            item.setAttribute("inert", "");
+            item.setAttribute("aria-hidden", "true");
+          } else {
+            item.removeAttribute("inert");
+            item.removeAttribute("aria-hidden");
+          }
+        }
+      });
+    }
+  } else if (pageHeader) {
+    if (isLocked) {
+      pageHeader.setAttribute("inert", "");
+      pageHeader.setAttribute("aria-hidden", "true");
+    } else {
+      pageHeader.removeAttribute("inert");
+      pageHeader.removeAttribute("aria-hidden");
+    }
+  }
+
+  document.body.style.overflow = isLocked ? "hidden" : "";
 }
 
-function openMenu(opener) {
+function openMenu(trigger) {
   window.clearTimeout(closeTimer);
   window.clearTimeout(openTimer);
-  menuOpener = opener;
-  menu.hidden = false;
-  menu.inert = false;
-  menu.setAttribute("aria-hidden", "false");
-  menu.dataset.state = "opening";
-  document.documentElement.classList.add("menu-open");
-  document.body.classList.add("menu-open");
-  setBackgroundInert(true);
+
+  menuOpener = trigger;
   desktopMenuTrigger.setAttribute("aria-expanded", "true");
   mobileMenuTrigger.setAttribute("aria-expanded", "true");
-  mobileMenuTrigger.setAttribute("aria-label", "닫기");
   mobileMenuLabel.textContent = "닫기";
-  const revealMenu = () => {
-    if (menu.dataset.state !== "opening") return;
-    window.clearTimeout(openTimer);
-    menu.dataset.state = "open";
-    const activeTab = menuTabs.find((tab) => tab.getAttribute("aria-selected") === "true");
-    (mobileViewport.matches ? activeTab : menuClose).focus();
-  };
-  window.requestAnimationFrame(revealMenu);
-  openTimer = window.setTimeout(revealMenu, 50);
-}
 
-function finishClose() {
-  if (menu.dataset.state !== "closed") return;
-  menu.hidden = true;
-  document.documentElement.classList.remove("menu-open");
-  document.body.classList.remove("menu-open");
-  setBackgroundInert(false);
-  const restoreTarget = menuOpener?.getClientRects().length
-    ? menuOpener
-    : mobileViewport.matches
-      ? mobileMenuTrigger
-      : desktopMenuTrigger;
-  restoreTarget.focus();
-  menuOpener = null;
+  menu.hidden = false;
+  menu.removeAttribute("inert");
+  menu.dataset.state = "opening";
+  menu.setAttribute("aria-hidden", "false");
+
+  lockBackground(true);
+
+  const activeTab = menuTabs.find((tab) => tab.classList.contains("full-menu__tab--active")) ?? menuTabs[0];
+  activateTab(activeTab);
+
+  openTimer = window.setTimeout(() => {
+    menu.dataset.state = "open";
+    menuClose.focus();
+  }, 20);
 }
 
 function closeMenu() {
-  if (menu.hidden || menu.dataset.state === "closed") return;
+  window.clearTimeout(closeTimer);
   window.clearTimeout(openTimer);
-  menu.dataset.state = "closed";
-  menu.inert = true;
-  menu.setAttribute("aria-hidden", "true");
+
   desktopMenuTrigger.setAttribute("aria-expanded", "false");
   mobileMenuTrigger.setAttribute("aria-expanded", "false");
-  mobileMenuTrigger.setAttribute("aria-label", "카테고리");
   mobileMenuLabel.textContent = "카테고리";
 
-  window.clearTimeout(closeTimer);
-  closeTimer = window.setTimeout(finishClose, mobileViewport.matches ? 400 : 250);
+  menu.dataset.state = "closing";
+
+  const duration = mobileViewport.matches ? 360 : 220;
+
+  closeTimer = window.setTimeout(() => {
+    menu.dataset.state = "closed";
+    menu.hidden = true;
+    menu.setAttribute("inert", "");
+    menu.setAttribute("aria-hidden", "true");
+    lockBackground(false);
+
+    if (menuOpener instanceof HTMLElement) {
+      menuOpener.focus();
+    }
+    menuOpener = null;
+  }, duration);
 }
 
-menuTabs.forEach((tab, index) => {
-  tab.addEventListener("click", () => selectMenuTab(tab));
-  tab.addEventListener("keydown", (event) => {
-    let nextIndex = index;
-    if (event.key === "ArrowRight") nextIndex = (index + 1) % menuTabs.length;
-    else if (event.key === "ArrowLeft") nextIndex = (index - 1 + menuTabs.length) % menuTabs.length;
-    else if (event.key === "Home") nextIndex = 0;
-    else if (event.key === "End") nextIndex = menuTabs.length - 1;
-    else return;
+function toggleMenu(trigger) {
+  if (menu.dataset.state === "open" || menu.dataset.state === "opening") {
+    closeMenu();
+  } else {
+    openMenu(trigger);
+  }
+}
 
-    event.preventDefault();
-    selectMenuTab(menuTabs[nextIndex], true);
+desktopMenuTrigger.addEventListener("click", () => toggleMenu(desktopMenuTrigger));
+mobileMenuTrigger.addEventListener("click", () => toggleMenu(mobileMenuTrigger));
+menuClose.addEventListener("click", closeMenu);
+
+menu.addEventListener("click", (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLElement)) return;
+
+  if (target.closest(".full-menu__item, .full-menu__heading-link")) {
+    closeMenu();
+  }
+});
+
+menuTabs.forEach((tab) => {
+  tab.addEventListener("click", () => activateTab(tab));
+
+  tab.addEventListener("keydown", (event) => {
+    const currentIndex = menuTabs.indexOf(tab);
+    let nextIndex = -1;
+
+    if (event.key === "ArrowRight") {
+      nextIndex = (currentIndex + 1) % menuTabs.length;
+    } else if (event.key === "ArrowLeft") {
+      nextIndex = (currentIndex - 1 + menuTabs.length) % menuTabs.length;
+    } else if (event.key === "Home") {
+      nextIndex = 0;
+    } else if (event.key === "End") {
+      nextIndex = menuTabs.length - 1;
+    }
+
+    if (nextIndex !== -1) {
+      event.preventDefault();
+      const nextTab = menuTabs[nextIndex];
+      nextTab.focus();
+      activateTab(nextTab);
+    }
   });
 });
 
-desktopMenuTrigger.addEventListener("click", () => openMenu(desktopMenuTrigger));
-mobileMenuTrigger.addEventListener("click", () => {
-  if (menu.hidden || menu.dataset.state === "closed") openMenu(mobileMenuTrigger);
-  else closeMenu();
-});
-menuClose.addEventListener("click", closeMenu);
-menu.addEventListener("click", (event) => {
-  if (event.target.closest(".full-menu__item, .full-menu__view-all, .full-menu__feature")) closeMenu();
-});
-menu.addEventListener("transitionend", (event) => {
-  if (
-    event.target === menu &&
-    ((mobileViewport.matches && event.propertyName === "transform") ||
-      (!mobileViewport.matches && event.propertyName === "opacity"))
-  ) {
-    window.clearTimeout(closeTimer);
-    finishClose();
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && (menu.dataset.state === "open" || menu.dataset.state === "opening")) {
+    event.preventDefault();
+    closeMenu();
+    return;
+  }
+
+  if (event.key === "Tab" && menu.dataset.state === "open") {
+    const focusable = setFocusTrap(menu);
+    if (!focusable.length) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   }
 });
 
-selectMenuTab(menuTabs[0]);
+function handleViewportChange() {
+  if (menu.dataset.state === "open") {
+    lockBackground(true);
+  }
+}
 
-/* --- 검색 모달 (Fixed) 상호작용 제어 --- */
+mobileViewport.addEventListener("change", handleViewportChange);
+renderCategory("여성");
+
+/* --- 검색 모달 인터랙션 및 제어 --- */
 function initSearchModal() {
   if (!searchModal) return;
 
-  function setSearchInert(isInert) {
-    pageHeader.inert = isInert;
-    pageMain.inert = isInert;
-    floatingActions.inert = isInert;
-    if (paginationNav) paginationNav.inert = isInert;
-    if (tabbar) tabbar.inert = isInert;
+  function lockBackgroundForSearch(isLocked) {
+    const elements = [pageMain, floatingActions, paginationNav].filter(Boolean);
+    elements.forEach((el) => {
+      if (isLocked) {
+        el.setAttribute("inert", "");
+        el.setAttribute("aria-hidden", "true");
+      } else {
+        el.removeAttribute("inert");
+        el.removeAttribute("aria-hidden");
+      }
+    });
+
+    if (pageHeader) {
+      if (isLocked) {
+        pageHeader.setAttribute("inert", "");
+        pageHeader.setAttribute("aria-hidden", "true");
+      } else {
+        pageHeader.removeAttribute("inert");
+        pageHeader.removeAttribute("aria-hidden");
+      }
+    }
+
+    if (tabbar) {
+      if (isLocked) {
+        tabbar.setAttribute("inert", "");
+        tabbar.setAttribute("aria-hidden", "true");
+      } else {
+        tabbar.removeAttribute("inert");
+        tabbar.removeAttribute("aria-hidden");
+      }
+    }
+
+    document.body.style.overflow = isLocked ? "hidden" : "";
   }
 
-  function openSearch(opener) {
-    if (menu.dataset.state === "open") closeMenu();
-    searchOpener = opener;
-    searchModal.hidden = false;
-    searchModal.inert = false;
-    searchModal.setAttribute("aria-hidden", "false");
-    document.documentElement.classList.add("modal-open");
-    document.body.classList.add("modal-open");
-    setSearchInert(true);
+  function openSearchModal(trigger) {
+    window.clearTimeout(searchCloseTimer);
+    searchOpener = trigger;
 
     if (desktopSearchTrigger) desktopSearchTrigger.setAttribute("aria-expanded", "true");
     if (mobileSearchTrigger) mobileSearchTrigger.setAttribute("aria-expanded", "true");
 
-    window.requestAnimationFrame(() => {
+    searchModal.hidden = false;
+    searchModal.removeAttribute("inert");
+    searchModal.dataset.state = "opening";
+    searchModal.setAttribute("aria-hidden", "false");
+
+    lockBackgroundForSearch(true);
+
+    window.setTimeout(() => {
       searchModal.dataset.state = "open";
-      if (searchInput) searchInput.focus();
-    });
+      if (searchInput) {
+        searchInput.focus();
+      } else if (searchCloseButton) {
+        searchCloseButton.focus();
+      }
+    }, 20);
   }
 
-  function closeSearch() {
-    if (searchModal.hidden || searchModal.dataset.state === "closed") return;
-    searchModal.dataset.state = "closed";
-    searchModal.inert = true;
-    searchModal.setAttribute("aria-hidden", "true");
+  function closeSearchModal() {
+    window.clearTimeout(searchCloseTimer);
 
     if (desktopSearchTrigger) desktopSearchTrigger.setAttribute("aria-expanded", "false");
     if (mobileSearchTrigger) mobileSearchTrigger.setAttribute("aria-expanded", "false");
 
-    window.clearTimeout(searchCloseTimer);
-    searchCloseTimer = window.setTimeout(() => {
-      searchModal.hidden = true;
-      document.documentElement.classList.remove("modal-open");
-      document.body.classList.remove("modal-open");
-      setSearchInert(false);
+    searchModal.dataset.state = "closing";
 
-      if (searchOpener && typeof searchOpener.focus === "function") {
+    searchCloseTimer = window.setTimeout(() => {
+      searchModal.dataset.state = "closed";
+      searchModal.hidden = true;
+      searchModal.setAttribute("inert", "");
+      searchModal.setAttribute("aria-hidden", "true");
+      lockBackgroundForSearch(false);
+
+      if (searchOpener instanceof HTMLElement) {
         searchOpener.focus();
       }
       searchOpener = null;
@@ -346,57 +419,53 @@ function initSearchModal() {
   }
 
   if (desktopSearchTrigger) {
-    desktopSearchTrigger.addEventListener("click", () => openSearch(desktopSearchTrigger));
+    desktopSearchTrigger.addEventListener("click", () => openSearchModal(desktopSearchTrigger));
   }
   if (mobileSearchTrigger) {
-    mobileSearchTrigger.addEventListener("click", () => openSearch(mobileSearchTrigger));
+    mobileSearchTrigger.addEventListener("click", () => openSearchModal(mobileSearchTrigger));
   }
   if (searchCloseButton) {
-    searchCloseButton.addEventListener("click", closeSearch);
+    searchCloseButton.addEventListener("click", closeSearchModal);
   }
 
-  // 탭 클릭 전환
   searchTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       searchTabs.forEach((t) => {
-        const isCurrent = t === tab;
-        t.classList.toggle("search-modal__tab--active", isCurrent);
-        t.setAttribute("aria-selected", String(isCurrent));
+        const isSelected = t === tab;
+        t.classList.toggle("search-modal__tab--active", isSelected);
+        t.setAttribute("aria-selected", String(isSelected));
       });
     });
   });
 
-  // 검색 태그 개별 삭제
   searchTagRemoveButtons.forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      const tag = e.target.closest(".search-modal__tag");
+      e.stopPropagation();
+      const tag = btn.closest(".search-modal__tag");
       if (tag) tag.remove();
     });
   });
 
-  // 최근 검색어 전체 삭제
   if (searchClearAllButton) {
     searchClearAllButton.addEventListener("click", () => {
-      const tagsContainer = searchModal.querySelector(".search-modal__tags");
-      if (tagsContainer) tagsContainer.innerHTML = "";
+      const tagsList = document.querySelector(".search-modal__tags");
+      if (tagsList) tagsList.innerHTML = "";
     });
   }
 
-  // Escape 닫기 및 탭 트랩
-  document.addEventListener("keydown", (event) => {
-    if (searchModal.hidden || searchModal.dataset.state !== "open") return;
+  window.addEventListener("keydown", (event) => {
+    if (searchModal.dataset.state !== "open") return;
 
     if (event.key === "Escape") {
       event.preventDefault();
-      closeSearch();
+      closeSearchModal();
       return;
     }
 
     if (event.key === "Tab") {
-      const focusable = [
-        ...searchModal.querySelectorAll('button:not([disabled]), a[href], input:not([disabled]), [tabindex]:not([tabindex="-1"])')
-      ].filter((el) => el.getClientRects().length > 0);
-
+      const focusable = searchModal.querySelectorAll(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
       if (!focusable.length) return;
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
@@ -414,7 +483,7 @@ function initSearchModal() {
 
 initSearchModal();
 
-/* --- 히어로 섹션 풀페이지 스크롤 & 일반 스크롤 전환 제어 --- */
+/* --- 히어로 풀페이지 스크롤, 일반 스크롤 전환 & 헤더 테마 제어 --- */
 function initFullPageScroll() {
   const heroSections = [...document.querySelectorAll(".hero")];
   const shortsSection = document.querySelector(".section-shorts");
@@ -427,23 +496,39 @@ function initFullPageScroll() {
   let isScrolling = false;
   let scrollEndTimer = null;
   let isHeroSnapActive = true;
+  let lastScrollTime = 0;
+  const SCROLL_COOLDOWN = 850;
+
+  // 헤더 스타일 실시간 동기화 (1,2,3페이지: 다크, 3페이지 하단: 화이트 반전)
+  function updateHeaderTheme(currentScrollY) {
+    if (!pageHeader) return;
+    const currentY = typeof currentScrollY === "number" ? currentScrollY : (window.scrollY || window.pageYOffset);
+    const hero3 = heroSections[heroSections.length - 1];
+    if (!hero3) return;
+
+    const shortsTop = shortsSection ? shortsSection.offsetTop : (hero3.offsetTop + hero3.offsetHeight);
+    const isLight = currentY >= (shortsTop - 80);
+    pageHeader.classList.toggle("outer-box--header--light", isLight);
+  }
 
   // 히어로 자동 스냅 활성화
   function enableHeroSnap() {
-    if (isHeroSnapActive) return;
-    isHeroSnapActive = true;
-    document.documentElement.style.scrollSnapType = "y mandatory";
+    if (!isHeroSnapActive) {
+      isHeroSnapActive = true;
+      document.documentElement.style.scrollSnapType = "y mandatory";
+    }
     if (paginationNav) {
       paginationNav.style.opacity = "";
       paginationNav.style.pointerEvents = "";
     }
   }
 
-  // 일반 스크롤 모드로 전환 (스냅 해제)
+  // 일반 스크롤 모드로 전환 (스냅 해제 및 인디케이터 숨김)
   function disableHeroSnap() {
-    if (!isHeroSnapActive) return;
-    isHeroSnapActive = false;
-    document.documentElement.style.scrollSnapType = "none";
+    if (isHeroSnapActive) {
+      isHeroSnapActive = false;
+      document.documentElement.style.scrollSnapType = "none";
+    }
     if (paginationNav) {
       paginationNav.style.opacity = "0";
       paginationNav.style.pointerEvents = "none";
@@ -453,6 +538,7 @@ function initFullPageScroll() {
   function updatePagination(index) {
     if (index < 0 || index >= heroSections.length) {
       disableHeroSnap();
+      updateHeaderTheme();
       return;
     }
     enableHeroSnap();
@@ -462,6 +548,7 @@ function initFullPageScroll() {
       item.classList.toggle("hero__pagination-item--active", isActive);
       item.setAttribute("aria-current", String(isActive));
     });
+    updateHeaderTheme();
   }
 
   function scrollToSection(index) {
@@ -470,6 +557,7 @@ function initFullPageScroll() {
     if (!targetSection) return;
 
     isScrolling = true;
+    lastScrollTime = Date.now();
     enableHeroSnap();
     updatePagination(index);
     targetSection.scrollIntoView({ behavior: "smooth" });
@@ -477,29 +565,30 @@ function initFullPageScroll() {
     window.clearTimeout(scrollEndTimer);
     scrollEndTimer = window.setTimeout(() => {
       isScrolling = false;
-    }, 700);
+      updateHeaderTheme();
+    }, SCROLL_COOLDOWN);
   }
 
-  // 세번째 페이지 하단(일반 스크롤 영역)으로 부드럽게 이동
   function scrollToNormalContent() {
     if (!shortsSection) return;
     isScrolling = true;
+    lastScrollTime = Date.now();
     disableHeroSnap();
     shortsSection.scrollIntoView({ behavior: "smooth" });
 
     window.clearTimeout(scrollEndTimer);
     scrollEndTimer = window.setTimeout(() => {
       isScrolling = false;
-    }, 700);
+      updateHeaderTheme();
+    }, SCROLL_COOLDOWN);
   }
 
-  // IntersectionObserver로 히어로 슬라이드 감지
   const heroObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
           const index = heroSections.indexOf(entry.target);
-          if (index !== -1) {
+          if (index !== -1 && !isScrolling) {
             updatePagination(index);
           }
         }
@@ -512,18 +601,18 @@ function initFullPageScroll() {
   );
   heroSections.forEach((section) => heroObserver.observe(section));
 
-  // 스크롤 위치 기반 실시간 모드 감지 (스크롤바 직접 드래그 등 대응)
   window.addEventListener(
     "scroll",
     () => {
+      const currentY = window.scrollY || window.pageYOffset;
+      updateHeaderTheme(currentY);
+
       if (isScrolling) return;
 
-      const currentY = window.scrollY || window.pageYOffset;
       const hero3 = heroSections[heroSections.length - 1];
       if (!hero3) return;
 
-      const heroBoundary = hero3.offsetTop + hero3.offsetHeight * 0.7;
-
+      const heroBoundary = hero3.offsetTop + hero3.offsetHeight * 0.75;
       if (currentY >= heroBoundary) {
         disableHeroSnap();
       } else {
@@ -544,8 +633,12 @@ function initFullPageScroll() {
     (event) => {
       if (menu.dataset.state === "open" || menu.dataset.state === "opening") return;
       if (searchModal && searchModal.dataset.state === "open") return;
+      const shortsModal = document.querySelector(".shorts-modal");
+      if (shortsModal && shortsModal.dataset.state === "open") return;
 
-      if (isScrolling) {
+      const now = Date.now();
+      // 스크롤 이동 중이거나 쿨다운 기간에는 모든 휠 이벤트 인터셉트하여 이중 점프 버그 방지!
+      if (isScrolling || (now - lastScrollTime < SCROLL_COOLDOWN)) {
         event.preventDefault();
         return;
       }
@@ -560,28 +653,25 @@ function initFullPageScroll() {
 
       // 1. 세번째 페이지 하단(일반 스크롤 영역)에 있는 경우
       if (currentY >= shortsTop - 20) {
-        // 일반 스크롤 영역 최상단에서 위로 휠을 올렸을 때 -> 세번째 페이지로 자동 복귀!
-        if (delta < 0 && currentY <= shortsTop + 10) {
+        // 일반 스크롤 최상단에서 위로 휠을 올렸을 때 -> 3번째 페이지만 정확하게 이동!
+        if (delta < 0 && currentY <= shortsTop + 15) {
           event.preventDefault();
           scrollToSection(heroSections.length - 1);
         }
-        // 그 외에는 브라우저 기본의 자연스러운 일반 스크롤 허용!
+        // 그 외 영역에서는 브라우저 고유의 자연스러운 일반 스크롤 작동
         return;
       }
 
       // 2. 히어로 1~3페이지(자동 스크롤 영역)에 있는 경우
       if (delta > 0) {
-        // 아래로 이동
         if (currentHeroIndex < heroSections.length - 1) {
           event.preventDefault();
           scrollToSection(currentHeroIndex + 1);
         } else if (currentHeroIndex === heroSections.length - 1) {
-          // 세번째 페이지에서 아래로 휠 다운 -> 세번째 페이지 하단 일반 스크롤 영역으로 진입!
           event.preventDefault();
           scrollToNormalContent();
         }
       } else if (delta < 0) {
-        // 위로 이동
         if (currentHeroIndex > 0) {
           event.preventDefault();
           scrollToSection(currentHeroIndex - 1);
@@ -594,6 +684,8 @@ function initFullPageScroll() {
   window.addEventListener("keydown", (event) => {
     if (menu.dataset.state === "open" || menu.dataset.state === "opening") return;
     if (searchModal && searchModal.dataset.state === "open") return;
+    const shortsModal = document.querySelector(".shorts-modal");
+    if (shortsModal && shortsModal.dataset.state === "open") return;
     if (document.activeElement?.closest("input, textarea, select")) return;
 
     const currentY = window.scrollY || window.pageYOffset;
@@ -601,7 +693,7 @@ function initFullPageScroll() {
     const shortsTop = shortsSection ? shortsSection.offsetTop : (hero3 ? hero3.offsetTop + window.innerHeight : 0);
 
     if (currentY >= shortsTop - 20) {
-      if ((event.key === "ArrowUp" || event.key === "PageUp") && currentY <= shortsTop + 10) {
+      if ((event.key === "ArrowUp" || event.key === "PageUp") && currentY <= shortsTop + 15) {
         event.preventDefault();
         scrollToSection(heroSections.length - 1);
       }
@@ -636,10 +728,12 @@ function initFullPageScroll() {
 
   window.addEventListener("scrollend", () => {
     isScrolling = false;
+    updateHeaderTheme();
   });
 
-  // 초기 로드 시 현재 스크롤 위치에 맞춰 스냅/일반 스크롤 모드 설정
+  // 초기 로드 시 스크롤 위치에 맞추어 헤더 테마 및 스냅 모드 동기화
   const initialY = window.scrollY || window.pageYOffset;
+  updateHeaderTheme(initialY);
   const hero3 = heroSections[heroSections.length - 1];
   const shortsTop = shortsSection ? shortsSection.offsetTop : (hero3 ? hero3.offsetTop + window.innerHeight : 0);
   if (initialY >= shortsTop - 30) {
@@ -651,6 +745,88 @@ function initFullPageScroll() {
 
 initFullPageScroll();
 
+/* --- 숏츠 비디오 모달 플레이어 인터랙션 --- */
+function initShortsModal() {
+  const shortsModal = document.querySelector("#shorts-modal");
+  if (!shortsModal) return;
+
+  const closeButton = shortsModal.querySelector(".shorts-modal__close");
+  const iframe = shortsModal.querySelector("#shorts-modal-iframe");
+  const productThumb = shortsModal.querySelector(".shorts-modal__product-thumb");
+  const productTitle = shortsModal.querySelector(".shorts-modal__product-title");
+  const productPrice = shortsModal.querySelector(".shorts-modal__product-price");
+  let shortsOpener = null;
+
+  function openShortsModal(card, trigger) {
+    shortsOpener = trigger || card;
+    const youtubeId = card.dataset.youtubeId || "7Uk01TEEm8w";
+    const title = card.querySelector(".shorts-card__caption-title")?.textContent || "";
+    const pName = card.querySelector(".shorts-card__product-name")?.textContent || "";
+    const pPrice = card.querySelector(".shorts-card__product-price")?.textContent || "";
+    const pThumb = card.querySelector(".shorts-card__product-image img")?.src || "";
+
+    if (iframe) {
+      iframe.src = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&playsinline=1&rel=0&loop=1&playlist=${youtubeId}`;
+    }
+
+    if (productTitle) productTitle.textContent = pName || title;
+    if (productPrice) productPrice.textContent = pPrice;
+    if (productThumb) {
+      productThumb.src = pThumb;
+      productThumb.alt = pName;
+    }
+
+    shortsModal.hidden = false;
+    shortsModal.removeAttribute("inert");
+    shortsModal.dataset.state = "open";
+    shortsModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+
+    if (closeButton) closeButton.focus();
+  }
+
+  function closeShortsModal() {
+    shortsModal.dataset.state = "closed";
+    if (iframe) {
+      iframe.src = "";
+    }
+
+    window.setTimeout(() => {
+      shortsModal.hidden = true;
+      shortsModal.setAttribute("inert", "");
+      shortsModal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+
+      if (shortsOpener instanceof HTMLElement) {
+        shortsOpener.focus();
+      }
+      shortsOpener = null;
+    }, 200);
+  }
+
+  if (closeButton) {
+    closeButton.addEventListener("click", closeShortsModal);
+  }
+
+  shortsModal.addEventListener("click", (e) => {
+    if (e.target === shortsModal) {
+      closeShortsModal();
+    }
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (shortsModal.dataset.state === "open" && e.key === "Escape") {
+      e.preventDefault();
+      closeShortsModal();
+    }
+  });
+
+  // 전역 노출을 위해 윈도우 객체 또는 이벤트 바인딩
+  window._openShortsModal = openShortsModal;
+}
+
+initShortsModal();
+
 /* --- 디스커버리 숏츠 데이터 동적 연동 및 렌더링 --- */
 async function initShortsSection() {
   const shortsContainer = document.querySelector(".section-shorts");
@@ -659,6 +835,23 @@ async function initShortsSection() {
   const titleElement = shortsContainer.querySelector("#shorts-title");
   const listElement = shortsContainer.querySelector(".shorts__list");
   if (!listElement) return;
+
+  function bindCardEvents() {
+    const cards = listElement.querySelectorAll(".shorts-card");
+    cards.forEach((card) => {
+      const videoWrap = card.querySelector(".shorts-card__video-wrap");
+      if (videoWrap) {
+        videoWrap.addEventListener("click", () => {
+          if (typeof window._openShortsModal === "function") {
+            window._openShortsModal(card, videoWrap);
+          }
+        });
+      }
+    });
+  }
+
+  // 초기 정적 마크업 바인딩
+  bindCardEvents();
 
   try {
     const response = await fetch("./data/yt-shorts.json");
@@ -672,13 +865,15 @@ async function initShortsSection() {
     }
 
     listElement.innerHTML = data.items
-      .map((item, index) => {
+      .map((item) => {
         const product = item.product || {};
         const formattedPrice = typeof product.price === "number" ? product.price.toLocaleString("ko-KR") : product.price || "";
+        const youtubeId = item.youtube_id || "7Uk01TEEm8w";
 
         return `
-          <article class="shorts-card" data-video-url="${item.video_url || ""}">
-            <div class="shorts-card__video-wrap">
+          <article class="shorts-card" data-video-url="${item.video_url || ""}" data-youtube-id="${youtubeId}">
+            <div class="shorts-card__video-wrap" role="button" tabindex="0" aria-label="${item.title} 숏츠 영상 재생">
+              <iframe class="shorts-card__video-element" src="https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${youtubeId}&playsinline=1&rel=0&modestbranding=1" title="${item.title}" allow="autoplay" loading="lazy"></iframe>
               <img class="shorts-card__thumbnail" src="${item.thumbnail_url}" alt="${item.title} 숏츠 영상" loading="lazy">
               <div class="shorts-card__badges">
                 <span class="shorts-card__play" aria-hidden="true">
@@ -710,8 +905,10 @@ async function initShortsSection() {
         `;
       })
       .join("");
+
+    bindCardEvents();
   } catch (err) {
-    // 정적 마크업 폴백 유지
+    // 폴백 유지
   }
 }
 
