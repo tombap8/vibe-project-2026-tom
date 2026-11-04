@@ -1,3 +1,4 @@
+import { initFooter } from "./modules/footer.js";
 import { initBestItem } from "./modules/best-item.js";
 import { initCollection } from "./modules/collection.js";
 
@@ -957,3 +958,5 @@ initShortsSection();
 initBestItem();
 
 initCollection();
+
+initFooter();

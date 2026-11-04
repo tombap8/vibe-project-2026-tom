@@ -10,6 +10,14 @@
     padding-block: 0;
   }
 
+  .outer-box--footer {
+    --section-pt: var(--footer-pt);
+    --section-pb: var(--footer-pb);
+    background: var(--footer-bg);
+    position: relative;
+    z-index: 1;
+  }
+
   .outer-box--header {
     position: fixed;
     z-index: var(--z-header);

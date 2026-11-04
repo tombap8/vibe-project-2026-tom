@@ -169,6 +169,13 @@
   --best-scrollbar-gap: 32px;
   --best-more-btn-h: 44px;
   --best-more-btn-w: 140px;
+
+  --footer-bg: var(--color-surface);
+  --footer-pt: 48px;
+  --footer-pb: 56px;
+  --footer-text: #666666;
+  --footer-text-muted: #888888;
+  --footer-divider: #e0e0e0;
   --collection-header-gap: 24px;
   --collection-gap: 26px;
   --collection-feature-width: 45.5%;
@@ -238,6 +245,8 @@
     --best-rank-size: 24px;
     --best-rank-fs: var(--fs-12);
     --best-card-gap: 10px;
+    --footer-pt: 32px;
+    --footer-pb: calc(var(--bottom-bar-height) + 40px);
     --collection-header-gap: 16px;
     --collection-gap: 16px;
     --collection-card-gap: 8px;

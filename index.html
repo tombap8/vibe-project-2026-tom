@@ -677,6 +677,146 @@
       </section>
     </main>
 
+    <footer class="outer-box outer-box--footer">
+      <div class="inner-box">
+        <div class="part-box part-box--column footer__container">
+          <!-- 1. 상단 바: 내비게이션 링크 + SNS/앱 -->
+          <div class="footer__top">
+            <nav class="footer__nav" aria-label="하단 메뉴">
+              <ul class="footer__nav-list">
+                <li class="footer__nav-item"><a class="footer__nav-link footer__nav-link--bold" href="#hero">ABOUT</a></li>
+                <li class="footer__nav-item"><a class="footer__nav-link" href="#hero">공지사항</a></li>
+                <li class="footer__nav-item"><a class="footer__nav-link" href="#hero">고객센터</a></li>
+                <li class="footer__nav-item"><a class="footer__nav-link" href="#hero">매장안내</a></li>
+                <li class="footer__nav-item"><a class="footer__nav-link" href="#hero">멤버십 혜택</a></li>
+                <li class="footer__nav-item"><a class="footer__nav-link" href="#hero">정품 인증 안내</a></li>
+              </ul>
+            </nav>
+
+            <div class="footer__top-extra">
+              <ul class="footer__sns" aria-label="공식 SNS">
+                <li><a class="footer__sns-link" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" aria-label="디스커버리 인스타그램 (새창)"><img src="./images/used/chanel-1.svg" alt="" width="28" height="28"></a></li>
+                <li><a class="footer__sns-link" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" aria-label="디스커버리 키즈 인스타그램 (새창)"><img src="./images/used/chanel-2.svg" alt="" width="28" height="28"></a></li>
+                <li><a class="footer__sns-link" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" aria-label="디스커버리 유튜브 (새창)"><img src="./images/used/chanel-3.svg" alt="" width="28" height="28"></a></li>
+                <li><a class="footer__sns-link" href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" aria-label="디스커버리 페이스북 (새창)"><img src="./images/used/chanel-4.svg" alt="" width="28" height="28"></a></li>
+              </ul>
+              <a class="footer__app-link-mobile" href="#hero">디스커버리 APP &darr;</a>
+            </div>
+          </div>
+
+          <!-- 2. 중간 바: 회사정보 아코디언 + 이용약관 + 드롭다운/앱스토어 -->
+          <div class="footer__mid">
+            <div class="footer__company-wrap">
+              <button class="footer__accordion-trigger" type="button" aria-expanded="false" aria-controls="footer-company-info" data-js="footer-accordion-btn">
+                <span>(주) 에프앤에프 사업자 정보</span>
+                <svg class="footer__accordion-arrow" width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3.5 6L8 10.5L12.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+
+              <!-- 회사 상세 정보 아코디언 -->
+              <div class="footer__company-detail" id="footer-company-info" hidden>
+                <address class="footer__address">
+                  <p>대표: 김창수 / 서울특별시 강남구 테헤란로8길 8</p>
+                  <p>사업자 등록번호: 153-81-02451 <a class="footer__biz-link" href="https://www.ftc.go.kr" target="_blank" rel="noopener noreferrer">사업자정보 확인</a></p>
+                  <p>통신판매업 신고번호 : 제2021-서울강남-03353호</p>
+                  <p>개인정보보호 책임자 : 류영석</p>
+                  <p>교환・반품 반송처 : 경기도 이천시 대월면 초지리 57 F&amp;F 물류센터 디스커버리 물류부</p>
+                  <p>고객센터 : <a class="footer__tel-link" href="tel:080-820-8802">080-820-8802</a> / 운영시간 : 평일 오전 9시 ~ 오후 6시(토/일/공휴일 휴무)</p>
+                </address>
+              </div>
+
+              <!-- 이용약관 및 개인정보처리방침 -->
+              <div class="footer__terms-row">
+                <ul class="footer__terms-list">
+                  <li class="footer__terms-item"><a class="footer__terms-link" href="#hero">이용약관</a></li>
+                  <li class="footer__terms-item"><a class="footer__terms-link footer__terms-link--bold" href="#hero">개인정보처리방침</a></li>
+                </ul>
+
+                <!-- 모바일 전용 언어 선택기 -->
+                <div class="footer__lang-mobile">
+                  <div class="footer__select-box footer__select-box--lang">
+                    <button class="footer__select-btn" type="button" aria-haspopup="listbox" aria-expanded="false" data-js="footer-lang-btn">
+                      <span class="footer__lang-current">KOREAN</span>
+                      <svg class="footer__select-arrow" width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="M3.5 6L8 10.5L12.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                    <ul class="footer__dropdown-list" role="listbox" hidden data-js="footer-lang-list">
+                      <li role="option"><button class="footer__dropdown-item footer__dropdown-item--active" type="button" data-lang="KOREAN">KOREAN</button></li>
+                      <li role="option"><button class="footer__dropdown-item" type="button" data-lang="ENGLISH">ENGLISH</button></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 데스크탑 우측 드롭다운 및 앱 다운로드 -->
+            <div class="footer__dropdowns">
+              <div class="footer__select-box" data-js="footer-family-box">
+                <button class="footer__select-btn" type="button" aria-haspopup="listbox" aria-expanded="false" data-js="footer-family-btn">
+                  <span>FAMILY SITE</span>
+                  <svg class="footer__select-arrow" width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3.5 6L8 10.5L12.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <ul class="footer__dropdown-list" role="listbox" hidden data-js="footer-family-list">
+                  <li role="option"><a class="footer__dropdown-item" href="https://www.mlb-korea.com" target="_blank" rel="noopener noreferrer">MLB</a></li>
+                  <li role="option"><a class="footer__dropdown-item" href="https://www.mlb-korea.com" target="_blank" rel="noopener noreferrer">MLB KIDS</a></li>
+                  <li role="option"><a class="footer__dropdown-item" href="https://www.duvetica.co.kr" target="_blank" rel="noopener noreferrer">DUVETICA</a></li>
+                  <li role="option"><a class="footer__dropdown-item" href="https://www.sergiotacchini.co.kr" target="_blank" rel="noopener noreferrer">SERGIO TACCHINI</a></li>
+                  <li role="option"><a class="footer__dropdown-item" href="https://www.supra-korea.com" target="_blank" rel="noopener noreferrer">SUPRA</a></li>
+                  <li role="option"><a class="footer__dropdown-item" href="https://www.banilaco.com" target="_blank" rel="noopener noreferrer">BANILA CO</a></li>
+                  <li role="option"><a class="footer__dropdown-item" href="https://www.collected.co.kr" target="_blank" rel="noopener noreferrer">COLLECTED</a></li>
+                  <li role="option"><a class="footer__dropdown-item" href="https://www.fnf.co.kr" target="_blank" rel="noopener noreferrer">F&amp;F</a></li>
+                </ul>
+              </div>
+
+              <div class="footer__select-box footer__select-box--lang" data-js="footer-lang-box">
+                <button class="footer__select-btn" type="button" aria-haspopup="listbox" aria-expanded="false" data-js="footer-lang-btn">
+                  <span class="footer__lang-current">KOREAN</span>
+                  <svg class="footer__select-arrow" width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3.5 6L8 10.5L12.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <ul class="footer__dropdown-list" role="listbox" hidden data-js="footer-lang-list">
+                  <li role="option"><button class="footer__dropdown-item footer__dropdown-item--active" type="button" data-lang="KOREAN">KOREAN</button></li>
+                  <li role="option"><button class="footer__dropdown-item" type="button" data-lang="ENGLISH">ENGLISH</button></li>
+                </ul>
+              </div>
+
+              <div class="footer__apps">
+                <a class="footer__app-btn" href="https://apps.apple.com" target="_blank" rel="noopener noreferrer" aria-label="App Store 다운로드 (새창)">
+                  <img src="./images/used/App_store.63996c51.svg" alt="App Store" height="20">
+                </a>
+                <a class="footer__app-btn" href="https://play.google.com" target="_blank" rel="noopener noreferrer" aria-label="Google Play 다운로드 (새창)">
+                  <img src="./images/used/Google_store.9d4f89dd.svg" alt="Google Play" height="20">
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. 하단 바: 카피라이트 + SGI보증 + ISMS 인증 -->
+          <div class="footer__bottom">
+            <p class="footer__copyright">Copyright &copy; F&amp;F Corp. All Rights Reserved.</p>
+
+            <div class="footer__cert-wrap">
+              <div class="footer__cert-sgi">
+                <img src="./images/used/sgi_korci.svg" alt="SGI서울보증" height="20">
+              </div>
+              <div class="footer__cert-isms">
+                <img class="footer__isms-logo" src="./images/used/icon-isms.svg" alt="ISMS 인증" width="36" height="30">
+                <div class="footer__isms-texts">
+                  <p>[인증범위] 에프앤에프 온라인 쇼핑몰 서비스 운영</p>
+                  <p>[유효기간] 2026.08.16 ~ 2029.08.15</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
     <nav class="hero__pagination" aria-label="프로모션 슬라이드 선택">
       <button class="hero__pagination-item hero__pagination-item--active" type="button" aria-label="1번 슬라이드로 이동: DISCOVER MY ACTIVE WINTER" aria-current="true" data-index="0"></button>
       <button class="hero__pagination-item" type="button" aria-label="2번 슬라이드로 이동: AIRWELL, THEIR WAY" aria-current="false" data-index="1"></button>
