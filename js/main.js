@@ -414,9 +414,11 @@ function initSearchModal() {
 
 initSearchModal();
 
-/* --- 히어로 섹션 풀페이지 스크롤 & 인디케이터 제어 --- */
+/* --- 히어로 섹션 풀페이지 스크롤 & 일반 스크롤 전환 제어 --- */
 function initFullPageScroll() {
   const heroSections = [...document.querySelectorAll(".hero")];
+  const shortsSection = document.querySelector(".section-shorts");
+  const paginationNav = document.querySelector(".hero__pagination");
   const paginationItems = [...document.querySelectorAll(".hero__pagination-item")];
 
   if (heroSections.length === 0) return;
@@ -424,9 +426,36 @@ function initFullPageScroll() {
   let currentHeroIndex = 0;
   let isScrolling = false;
   let scrollEndTimer = null;
+  let isHeroSnapActive = true;
+
+  // 히어로 자동 스냅 활성화
+  function enableHeroSnap() {
+    if (isHeroSnapActive) return;
+    isHeroSnapActive = true;
+    document.documentElement.style.scrollSnapType = "y mandatory";
+    if (paginationNav) {
+      paginationNav.style.opacity = "";
+      paginationNav.style.pointerEvents = "";
+    }
+  }
+
+  // 일반 스크롤 모드로 전환 (스냅 해제)
+  function disableHeroSnap() {
+    if (!isHeroSnapActive) return;
+    isHeroSnapActive = false;
+    document.documentElement.style.scrollSnapType = "none";
+    if (paginationNav) {
+      paginationNav.style.opacity = "0";
+      paginationNav.style.pointerEvents = "none";
+    }
+  }
 
   function updatePagination(index) {
-    if (index < 0 || index >= heroSections.length) return;
+    if (index < 0 || index >= heroSections.length) {
+      disableHeroSnap();
+      return;
+    }
+    enableHeroSnap();
     currentHeroIndex = index;
     paginationItems.forEach((item, idx) => {
       const isActive = idx === index;
@@ -441,6 +470,7 @@ function initFullPageScroll() {
     if (!targetSection) return;
 
     isScrolling = true;
+    enableHeroSnap();
     updatePagination(index);
     targetSection.scrollIntoView({ behavior: "smooth" });
 
@@ -450,10 +480,24 @@ function initFullPageScroll() {
     }, 700);
   }
 
-  const observer = new IntersectionObserver(
+  // 세번째 페이지 하단(일반 스크롤 영역)으로 부드럽게 이동
+  function scrollToNormalContent() {
+    if (!shortsSection) return;
+    isScrolling = true;
+    disableHeroSnap();
+    shortsSection.scrollIntoView({ behavior: "smooth" });
+
+    window.clearTimeout(scrollEndTimer);
+    scrollEndTimer = window.setTimeout(() => {
+      isScrolling = false;
+    }, 700);
+  }
+
+  // IntersectionObserver로 히어로 슬라이드 감지
+  const heroObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
           const index = heroSections.indexOf(entry.target);
           if (index !== -1) {
             updatePagination(index);
@@ -463,11 +507,31 @@ function initFullPageScroll() {
     },
     {
       root: null,
-      threshold: 0.5,
+      threshold: [0.5, 0.7],
     }
   );
+  heroSections.forEach((section) => heroObserver.observe(section));
 
-  heroSections.forEach((section) => observer.observe(section));
+  // 스크롤 위치 기반 실시간 모드 감지 (스크롤바 직접 드래그 등 대응)
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (isScrolling) return;
+
+      const currentY = window.scrollY || window.pageYOffset;
+      const hero3 = heroSections[heroSections.length - 1];
+      if (!hero3) return;
+
+      const heroBoundary = hero3.offsetTop + hero3.offsetHeight * 0.7;
+
+      if (currentY >= heroBoundary) {
+        disableHeroSnap();
+      } else {
+        enableHeroSnap();
+      }
+    },
+    { passive: true }
+  );
 
   paginationItems.forEach((item, index) => {
     item.addEventListener("click", () => {
@@ -487,14 +551,41 @@ function initFullPageScroll() {
       }
 
       const delta = event.deltaY;
-      if (Math.abs(delta) < 20) return;
+      if (Math.abs(delta) < 15) return;
 
-      if (delta > 0 && currentHeroIndex < heroSections.length - 1) {
-        event.preventDefault();
-        scrollToSection(currentHeroIndex + 1);
-      } else if (delta < 0 && currentHeroIndex > 0) {
-        event.preventDefault();
-        scrollToSection(currentHeroIndex - 1);
+      const currentY = window.scrollY || window.pageYOffset;
+      const hero3 = heroSections[heroSections.length - 1];
+      const hero3Top = hero3 ? hero3.offsetTop : 0;
+      const shortsTop = shortsSection ? shortsSection.offsetTop : hero3Top + window.innerHeight;
+
+      // 1. 세번째 페이지 하단(일반 스크롤 영역)에 있는 경우
+      if (currentY >= shortsTop - 20) {
+        // 일반 스크롤 영역 최상단에서 위로 휠을 올렸을 때 -> 세번째 페이지로 자동 복귀!
+        if (delta < 0 && currentY <= shortsTop + 10) {
+          event.preventDefault();
+          scrollToSection(heroSections.length - 1);
+        }
+        // 그 외에는 브라우저 기본의 자연스러운 일반 스크롤 허용!
+        return;
+      }
+
+      // 2. 히어로 1~3페이지(자동 스크롤 영역)에 있는 경우
+      if (delta > 0) {
+        // 아래로 이동
+        if (currentHeroIndex < heroSections.length - 1) {
+          event.preventDefault();
+          scrollToSection(currentHeroIndex + 1);
+        } else if (currentHeroIndex === heroSections.length - 1) {
+          // 세번째 페이지에서 아래로 휠 다운 -> 세번째 페이지 하단 일반 스크롤 영역으로 진입!
+          event.preventDefault();
+          scrollToNormalContent();
+        }
+      } else if (delta < 0) {
+        // 위로 이동
+        if (currentHeroIndex > 0) {
+          event.preventDefault();
+          scrollToSection(currentHeroIndex - 1);
+        }
       }
     },
     { passive: false }
@@ -505,10 +596,25 @@ function initFullPageScroll() {
     if (searchModal && searchModal.dataset.state === "open") return;
     if (document.activeElement?.closest("input, textarea, select")) return;
 
+    const currentY = window.scrollY || window.pageYOffset;
+    const hero3 = heroSections[heroSections.length - 1];
+    const shortsTop = shortsSection ? shortsSection.offsetTop : (hero3 ? hero3.offsetTop + window.innerHeight : 0);
+
+    if (currentY >= shortsTop - 20) {
+      if ((event.key === "ArrowUp" || event.key === "PageUp") && currentY <= shortsTop + 10) {
+        event.preventDefault();
+        scrollToSection(heroSections.length - 1);
+      }
+      return;
+    }
+
     if (event.key === "ArrowDown" || event.key === "PageDown") {
       if (currentHeroIndex < heroSections.length - 1) {
         event.preventDefault();
         scrollToSection(currentHeroIndex + 1);
+      } else if (currentHeroIndex === heroSections.length - 1 && shortsSection) {
+        event.preventDefault();
+        scrollToNormalContent();
       }
     } else if (event.key === "ArrowUp" || event.key === "PageUp") {
       if (currentHeroIndex > 0) {
@@ -520,13 +626,93 @@ function initFullPageScroll() {
       scrollToSection(0);
     } else if (event.key === "End") {
       event.preventDefault();
-      scrollToSection(heroSections.length - 1);
+      if (shortsSection) {
+        scrollToNormalContent();
+      } else {
+        scrollToSection(heroSections.length - 1);
+      }
     }
   });
 
   window.addEventListener("scrollend", () => {
     isScrolling = false;
   });
+
+  // 초기 로드 시 현재 스크롤 위치에 맞춰 스냅/일반 스크롤 모드 설정
+  const initialY = window.scrollY || window.pageYOffset;
+  const hero3 = heroSections[heroSections.length - 1];
+  const shortsTop = shortsSection ? shortsSection.offsetTop : (hero3 ? hero3.offsetTop + window.innerHeight : 0);
+  if (initialY >= shortsTop - 30) {
+    disableHeroSnap();
+  } else {
+    enableHeroSnap();
+  }
 }
 
 initFullPageScroll();
+
+/* --- 디스커버리 숏츠 데이터 동적 연동 및 렌더링 --- */
+async function initShortsSection() {
+  const shortsContainer = document.querySelector(".section-shorts");
+  if (!shortsContainer) return;
+
+  const titleElement = shortsContainer.querySelector("#shorts-title");
+  const listElement = shortsContainer.querySelector(".shorts__list");
+  if (!listElement) return;
+
+  try {
+    const response = await fetch("./data/yt-shorts.json");
+    if (!response.ok) return;
+
+    const data = await response.json();
+    if (!data || !Array.isArray(data.items)) return;
+
+    if (titleElement && data.section_title) {
+      titleElement.textContent = data.section_title;
+    }
+
+    listElement.innerHTML = data.items
+      .map((item, index) => {
+        const product = item.product || {};
+        const formattedPrice = typeof product.price === "number" ? product.price.toLocaleString("ko-KR") : product.price || "";
+
+        return `
+          <article class="shorts-card" data-video-url="${item.video_url || ""}">
+            <div class="shorts-card__video-wrap">
+              <img class="shorts-card__thumbnail" src="${item.thumbnail_url}" alt="${item.title} 숏츠 영상" loading="lazy">
+              <div class="shorts-card__badges">
+                <span class="shorts-card__play" aria-hidden="true">
+                  <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
+                    <path d="M1 1.5l8 4.5-8 4.5V1.5z"></path>
+                  </svg>
+                </span>
+                <span class="shorts-card__views">
+                  <svg class="shorts-card__views-icon" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4Z"></path>
+                  </svg>
+                  ${item.view_count ?? ""}
+                </span>
+              </div>
+              <div class="shorts-card__caption">
+                <strong class="shorts-card__caption-title">${item.title}</strong>
+              </div>
+            </div>
+            <a class="shorts-card__product" href="#hero" aria-label="${product.name || "상품"} 상세 보기">
+              <div class="shorts-card__product-image">
+                <img src="${product.thumbnail_url || ""}" alt="" loading="lazy">
+              </div>
+              <div class="shorts-card__product-info">
+                <span class="shorts-card__product-name">${product.name || ""}</span>
+                <strong class="shorts-card__product-price">${formattedPrice}</strong>
+              </div>
+            </a>
+          </article>
+        `;
+      })
+      .join("");
+  } catch (err) {
+    // 정적 마크업 폴백 유지
+  }
+}
+
+initShortsSection();
