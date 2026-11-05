@@ -69,6 +69,16 @@
    └─ config.js            # 상수 및 설정
 ```
 
+## 공지사항 게시판
+
+- 게시판 주소: [`pages/notice.html`](./pages/notice.html)
+- URL의 `view` 값으로 목록·상세·작성·수정 화면을 전환하며, 최초 방문 시 시안에 나온 공지사항 샘플을 생성합니다.
+- 화면 모듈은 [`js/services/notice-repository.js`](./js/services/notice-repository.js)의 Repository 인터페이스만 사용합니다.
+- 게시물 JSON은 `discovery:notice:posts` localStorage 키에 저장하고, 첨부 파일 바이너리는 IndexedDB에 저장해 localStorage 용량 제한을 피합니다.
+- 홈 화면 `body` 바로 아래의 문서 흐름에 목록 정렬 기준 상위 3개 공지를 어두운 배경과 흰색 글자로 된 한 줄 회전 박스로 표시합니다. 분홍색 라운드 `Notice` 라벨, 중앙 정렬 공지 문구, 오른쪽 컨트롤을 제공하며 멈춤 컨트롤은 네모형입니다. 공지 박스가 메뉴와 나머지 페이지 콘텐츠를 밀어내며, 닫거나 사용자가 스크롤하면 높이만큼 스크롤 위치를 보정해 빈 공간 없이 아래 콘텐츠가 함께 위로 이동합니다. 포인터가 올라오거나 키보드 포커스가 진입하면 자동 회전을 멈추며, 모션 감소 설정에서는 자동 회전을 시작하지 않습니다.
+- 공통 회전 박스 표현과 제어는 [`js/modules/notice-ticker.js`](./js/modules/notice-ticker.js), 스타일은 [`css/components/notice-ticker.css`](./css/components/notice-ticker.css)에서 관리합니다.
+- Firestore 전환 시 Repository 진입점과 구현체를 교체하고, 첨부 파일 메서드는 Firebase Storage 구현으로 교체합니다.
+
 ---
 
 ## 📋 완료 전 체크리스트
@@ -78,3 +88,8 @@
 - [ ] 토큰 하드코딩 유무 확인
 - [ ] 키보드 접근성 및 시맨틱 마크업 검증
 - [ ] 불필요한 `console.log` 및 임시 텍스트(`TODO`, `test` 등) 제거
+
+### 테스트 진행 원칙
+
+- 변경 범위에 맞는 기존 테스트·린트·빌드 또는 브라우저 검증을 수행합니다. 문서만 수정한 경우에는 별도 테스트를 생략합니다.
+- 검증 및 개발에 사용한 임시 서버·워처·백그라운드 프로세스는 작업 완료 전에 종료하고, 작업이 끝난 뒤 불필요한 프로세스가 계속 실행되지 않도록 확인합니다.

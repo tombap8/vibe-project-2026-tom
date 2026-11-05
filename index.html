@@ -6,10 +6,25 @@
     <title>Discovery Expedition | 공식 온라인몰</title>
     <meta name="description" content="디스커버리 익스페디션의 액티브한 라이프스타일과 겨울 컬렉션을 만나보세요.">
     <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/components/notice-ticker.css">
     <script defer src="./vendor/swiper/swiper-bundle.min.js"></script>
 <script type="module" src="./js/main.js"></script>
   </head>
   <body>
+    <aside class="outer-box notice-ticker" data-js="notice-ticker" role="region" aria-label="상단 공지사항" aria-roledescription="공지사항 회전" hidden>
+      <div class="inner-box">
+        <div class="part-box notice-ticker__content">
+          <strong class="notice-ticker__label">Notice</strong>
+          <a class="notice-ticker__link" data-js="notice-ticker-link" aria-live="off"></a>
+          <div class="notice-ticker__controls" role="group" aria-label="공지사항 자동 넘김 제어">
+            <button class="notice-ticker__button" type="button" data-js="notice-ticker-pause" aria-label="멈춤">Ⅱ</button>
+            <button class="notice-ticker__button" type="button" data-js="notice-ticker-play" aria-label="재생">▶</button>
+            <button class="notice-ticker__button" type="button" data-js="notice-ticker-close" aria-label="닫기">×</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
     <header class="outer-box outer-box--header">
       <div class="inner-box">
         <div class="part-box part-box--between header__content">
@@ -805,7 +820,7 @@
             <nav class="footer__nav" aria-label="하단 메뉴">
               <ul class="footer__nav-list">
                 <li class="footer__nav-item"><a class="footer__nav-link footer__nav-link--bold" href="#hero">ABOUT</a></li>
-                <li class="footer__nav-item"><a class="footer__nav-link" href="#hero">공지사항</a></li>
+                <li class="footer__nav-item"><a class="footer__nav-link" href="./pages/notice.html">공지사항</a></li>
                 <li class="footer__nav-item"><a class="footer__nav-link" href="#hero">고객센터</a></li>
                 <li class="footer__nav-item"><a class="footer__nav-link" href="#hero">매장안내</a></li>
                 <li class="footer__nav-item"><a class="footer__nav-link" href="#hero">멤버십 혜택</a></li>

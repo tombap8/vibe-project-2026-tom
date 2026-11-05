@@ -2,6 +2,8 @@ import { initFooter } from "./modules/footer.js";
 import { initBestItem } from "./modules/best-item.js";
 import { initCollection } from "./modules/collection.js";
 import { initTrendPick } from "./modules/trend-pick.js";
+import { renderNoticeTicker, showNoticeTickerError } from "./modules/notice-ticker.js";
+import { noticeRepository } from "./services/notice-repository.js";
 
 const menuImages = [
   "discovery-mob-11.png",
@@ -963,3 +965,7 @@ initCollection();
 initTrendPick();
 
 initFooter();
+
+noticeRepository.getAll()
+  .then((posts) => renderNoticeTicker(posts, "./pages/notice.html"))
+  .catch(showNoticeTickerError);
