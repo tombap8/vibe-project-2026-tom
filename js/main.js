@@ -4,6 +4,7 @@ import { initCollection } from "./modules/collection.js";
 import { initTrendPick } from "./modules/trend-pick.js";
 import { renderNoticeTicker, showNoticeTickerError } from "./modules/notice-ticker.js";
 import { noticeRepository } from "./services/notice-repository.js";
+import { initBestItemShopping, initCartBadges } from "./modules/shop.js";
 
 const menuImages = [
   "discovery-mob-11.png",
@@ -959,6 +960,9 @@ async function initShortsSection() {
 initShortsSection();
 
 initBestItem();
+
+initCartBadges();
+initBestItemShopping();
 
 initCollection();
 

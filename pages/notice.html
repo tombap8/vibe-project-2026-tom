@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/components/notice.css">
     <script type="module" src="../js/modules/notice-board.js"></script>
+    <script type="module" src="../js/modules/shop-page.js"></script>
   </head>
   <body class="notice-site">
     <a class="visually-hidden notice-skip-link" href="#main-content">본문 바로가기</a>
@@ -29,8 +30,9 @@
             <a href="../index.html" aria-label="검색">
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
             </a>
-            <a href="../index.html" aria-label="장바구니">
+            <a class="cart-indicator" href="./cart.html" aria-label="장바구니">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"></path><path d="M9 9V6a3 3 0 0 1 6 0v3"></path></svg>
+              <span class="cart-indicator__count" data-js="cart-count" aria-live="polite" hidden>0</span>
             </a>
             <a href="../index.html" aria-label="마이페이지">
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
@@ -44,6 +46,7 @@
     </header>
 
     <main id="main-content">
+      <p class="shop-status" data-js="shop-status" role="status" aria-live="polite"></p>
       <section class="outer-box notice-page" aria-labelledby="notice-page-title">
         <div class="inner-box">
           <div class="part-box notice-page__layout">

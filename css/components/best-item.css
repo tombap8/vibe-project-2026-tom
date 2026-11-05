@@ -45,6 +45,7 @@
     flex-direction: column;
     height: auto;
     gap: 12px;
+    cursor: pointer;
   }
 
   .best-card__thumb-wrap {

@@ -81,6 +81,12 @@
 
 ---
 
+## 베스트 상품 상세 및 장바구니
+
+- Best Item 상품의 이미지·상품명·가격은 [`data/best-items.json`](./data/best-items.json)에서 관리하며, 카드 선택 시 `pages/product-detail.html?id=...`의 상세 화면에 같은 정보를 표시합니다.
+- 상세 화면의 장바구니 버튼으로 상품을 담고, 장바구니에서 상품별 수량·금액과 총 결제금액을 확인하거나 상품을 삭제할 수 있습니다.
+- 장바구니 데이터는 `discovery:shop:cart` localStorage 키에 저장하며, 홈·공지·상세·장바구니 페이지의 장바구니 아이콘에는 총 수량 배지를 표시합니다.
+
 ## 📋 완료 전 체크리스트
 
 작업을 완료하거나 커밋하기 전 [`spec-kit/AGENTS.md`](./spec-kit/AGENTS.md)의 **PART 4 체크리스트**를 반드시 자체 검수하세요.

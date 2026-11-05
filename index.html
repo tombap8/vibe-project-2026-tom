@@ -46,9 +46,10 @@
             <button class="icon-button icon-button--search" type="button" aria-label="검색" aria-expanded="false" aria-controls="search-modal">
               <img src="./images/used/search_icon_white_size28.21536056.svg" alt="">
             </button>
-            <button class="icon-button" type="button" aria-label="장바구니">
+            <a class="icon-button cart-indicator" href="./pages/cart.html" aria-label="장바구니">
               <img src="./images/used/cart_icon_white_size28.2a67abe7.svg" alt="">
-            </button>
+              <span class="cart-indicator__count" data-js="cart-count" aria-live="polite" hidden>0</span>
+            </a>
             <button class="icon-button" type="button" aria-label="마이페이지">
               <img src="./images/used/mypage_icon_white_size28.ecf13ebe.svg" alt="">
             </button>
@@ -61,6 +62,7 @@
     </header>
 
     <main id="main-content">
+      <p class="shop-status" data-js="shop-status" role="status" aria-live="polite"></p>
       <section class="outer-box outer-box--bleed hero hero--slide-1" id="hero" aria-labelledby="hero-title">
         <div class="inner-box hero__inner">
           <div class="part-box hero__stage">
@@ -1285,10 +1287,11 @@
         <img src="./images/used/main-logo.svg" alt="">
         <span>홈</span>
       </a>
-      <button class="tabbar__item" type="button" aria-label="장바구니">
+      <a class="tabbar__item cart-indicator" href="./pages/cart.html" aria-label="장바구니">
         <img src="./images/used/cart_icon_white_size28.2a67abe7.svg" alt="">
+        <span class="cart-indicator__count" data-js="cart-count" aria-live="polite" hidden>0</span>
         <span>장바구니</span>
-      </button>
+      </a>
       <button class="tabbar__item" type="button" aria-label="마이페이지">
         <img src="./images/used/mypage_icon_white_size28.ecf13ebe.svg" alt="">
         <span>마이</span>

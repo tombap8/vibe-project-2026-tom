@@ -173,6 +173,10 @@
   --best-scrollbar-gap: 32px;
   --best-more-btn-h: 44px;
   --best-more-btn-w: 140px;
+  --product-image-ratio: 3 / 4;
+  --cart-thumbnail-max-width: 160px;
+  --cart-badge-offset-x: 20%;
+  --cart-badge-offset-y: -10%;
 
   --footer-bg: var(--color-surface);
   --footer-pt: 48px;
