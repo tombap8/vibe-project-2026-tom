@@ -1,5 +1,8 @@
 import { noticeRepository } from '../services/notice-repository.js';
-import { initFooter } from './footer.js';
+import { getCurrentAuthSession } from '../services/auth-service.js';
+import { siteShellReady } from './site-shell.js';
+
+await siteShellReady;
 
 const PAGE_SIZE = 7;
 const MAX_CONTENT_LENGTH = 5000;
@@ -24,6 +27,9 @@ const view = document.querySelector('[data-js="notice-view"]');
 const pageTitle = document.querySelector('[data-js="page-title"]');
 const pageDescription = document.querySelector('[data-js="page-description"]');
 const breadcrumbCurrent = document.querySelector('[data-js="breadcrumb-current"]');
+let currentUserIsAdmin = false;
+let currentAuthUser = null;
+let boardInitialized = false;
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, (character) => ({
@@ -143,7 +149,7 @@ function renderError(message) {
   view.innerHTML = `<p class="notice-status" role="alert">${escapeHtml(message)}</p><p class="notice-actions"><a class="notice-button" href="./notice.html">목록으로</a></p>`;
 }
 
-function renderList(posts, parameters) {
+function renderList(posts, parameters, isAdmin) {
   const type = parameters.get('type') || 'all';
   const query = parameters.get('q') || '';
   const currentPage = Math.max(1, Number(parameters.get('page')) || 1);
@@ -197,7 +203,7 @@ function renderList(posts, parameters) {
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
             </button>
           </label>
-          <a class="notice-button notice-button--primary" href="${routeUrl({ view: 'write' })}"><span aria-hidden="true">✎</span> 글쓰기</a>
+          ${isAdmin ? `<a class="notice-button notice-button--primary" href="${routeUrl({ view: 'write' })}"><span aria-hidden="true">✎</span> 글쓰기</a>` : ''}
         </form>
       </div>
       ${pagePosts.length ? `<div class="notice-table-wrap">
@@ -226,7 +232,7 @@ function renderList(posts, parameters) {
   });
 }
 
-function renderDetail(posts, post) {
+function renderDetail(posts, post, isAdmin) {
   const index = posts.findIndex((item) => item.id === post.id);
   const previous = posts[index - 1];
   const next = posts[index + 1];
@@ -271,8 +277,8 @@ function renderDetail(posts, post) {
       </nav>
       <div class="notice-detail__actions">
         <a class="notice-button" href="./notice.html">목록으로</a>
-        <a class="notice-button" href="${routeUrl({ view: 'edit', id: post.id })}">수정</a>
-        <button class="notice-button notice-button--primary" type="button" data-delete="${escapeHtml(post.id)}">삭제</button>
+        ${isAdmin ? `<a class="notice-button" href="${routeUrl({ view: 'edit', id: post.id })}">수정</a>
+        <button class="notice-button notice-button--primary" type="button" data-delete="${escapeHtml(post.id)}">삭제</button>` : ''}
       </div>
     </article>`;
 }
@@ -541,14 +547,25 @@ function setupForm(post) {
   }
 }
 
-async function handleView(parameters, posts) {
+function redirectToLogin() {
+  const loginUrl = new URL('./login.html', window.location.href);
+  loginUrl.searchParams.set('returnTo', window.location.href);
+  window.location.assign(loginUrl.href);
+}
+
+async function handleView(parameters, posts, isAdmin) {
   const mode = parameters.get('view') || 'list';
   if (mode === 'write') {
+    if (!isAdmin) {
+      if (currentAuthUser) renderError('공지사항 작성은 관리자 계정으로 로그인해야 이용할 수 있습니다.');
+      else redirectToLogin();
+      return;
+    }
     renderForm();
     return;
   }
   if (mode === 'list') {
-    renderList(posts, parameters);
+    renderList(posts, parameters, isAdmin);
     return;
   }
   const id = parameters.get('id');
@@ -558,6 +575,11 @@ async function handleView(parameters, posts) {
     return;
   }
   if (mode === 'edit') {
+    if (!isAdmin) {
+      if (currentAuthUser) renderError('공지사항 수정은 관리자 계정으로 로그인해야 이용할 수 있습니다.');
+      else redirectToLogin();
+      return;
+    }
     renderForm(post);
     return;
   }
@@ -566,13 +588,17 @@ async function handleView(parameters, posts) {
     return;
   }
   const viewedPost = await noticeRepository.incrementViews(id);
-  renderDetail(posts.map((item) => item.id === id ? viewedPost : item), viewedPost);
+  renderDetail(posts.map((item) => item.id === id ? viewedPost : item), viewedPost, isAdmin);
 }
 
 function setupViewActions() {
   view.addEventListener('click', async (event) => {
     const deleteButton = event.target.closest('[data-delete]');
     if (deleteButton) {
+      if (!currentUserIsAdmin) {
+        renderError('공지사항 삭제는 관리자 계정으로 로그인해야 이용할 수 있습니다.');
+        return;
+      }
       if (!window.confirm('이 공지사항을 삭제하시겠습니까?')) return;
       try {
         await noticeRepository.remove(deleteButton.dataset.delete);
@@ -603,15 +629,25 @@ function setupViewActions() {
   });
 }
 
-async function initialize() {
-  initFooter();
-  setupViewActions();
+async function initializeBoard() {
   try {
+    const { user, profile } = await getCurrentAuthSession();
+    currentAuthUser = user;
+    currentUserIsAdmin = profile?.role === 'admin';
     const posts = await noticeRepository.getAll();
-    await handleView(new URLSearchParams(window.location.search), posts);
+    await handleView(new URLSearchParams(window.location.search), posts, currentUserIsAdmin);
   } catch (error) {
     renderError(error.message || '공지사항을 불러오지 못했습니다.');
   }
 }
 
-initialize();
+setupViewActions();
+window.addEventListener('site-auth-change', (event) => {
+  const wasAdmin = currentUserIsAdmin;
+  currentAuthUser = event.detail.user;
+  currentUserIsAdmin = event.detail.profile?.role === 'admin';
+  if (boardInitialized && wasAdmin !== currentUserIsAdmin) window.location.reload();
+});
+initializeBoard().finally(() => {
+  boardInitialized = true;
+});

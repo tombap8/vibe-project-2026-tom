@@ -1,10 +1,10 @@
-import { initFooter } from "./modules/footer.js";
 import { initBestItem } from "./modules/best-item.js";
 import { initCollection } from "./modules/collection.js";
 import { initTrendPick } from "./modules/trend-pick.js";
 import { renderNoticeTicker, showNoticeTickerError } from "./modules/notice-ticker.js";
 import { noticeRepository } from "./services/notice-repository.js";
 import { initBestItemShopping, initCartBadges } from "./modules/shop.js";
+import { siteShellReady } from "./modules/site-shell.js";
 
 const menuImages = [
   "discovery-mob-11.png",
@@ -17,6 +17,8 @@ const menuImages = [
   "discovery-mob-32.png",
   "discovery-mob-56.png",
 ];
+
+await siteShellReady;
 
 const menuCategories = {
   여성: [
@@ -967,8 +969,6 @@ initBestItemShopping();
 initCollection();
 
 initTrendPick();
-
-initFooter();
 
 noticeRepository.getAll()
   .then((posts) => renderNoticeTicker(posts, "./pages/notice.html"))

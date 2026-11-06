@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>로그인 | Discovery Expedition</title>
+    <meta name="description" content="디스커버리 익스페디션에 로그인하세요.">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components/notice.css">
+    <script type="module" src="../js/modules/auth-page.js"></script>
+  </head>
+  <body class="notice-site auth-page">
+    <a class="visually-hidden notice-skip-link" href="#main-content">본문 바로가기</a>
+    <div data-site-header-slot></div>
+
+    <main id="main-content">
+      <section class="outer-box notice-page" aria-labelledby="auth-page-title">
+        <div class="inner-box">
+          <div class="part-box notice-page__layout auth-page__content">
+            <nav class="notice-breadcrumb" aria-label="현재 위치">
+              <a href="../index.html">홈</a>
+              <span aria-hidden="true">&gt;</span>
+              <span aria-current="page">로그인</span>
+            </nav>
+            <header class="notice-page__heading">
+              <p>MEMBERSHIP</p>
+              <h1 id="auth-page-title">로그인</h1>
+              <p>계정에 로그인해 주세요.</p>
+            </header>
+
+            <section class="auth-page__section" aria-labelledby="login-title">
+              <h2 id="login-title">로그인</h2>
+              <form class="notice-form" data-js="login-form">
+                <div class="notice-form__row">
+                  <label class="notice-form__label" for="login-username">아이디</label>
+                  <div class="notice-form__field">
+                    <input class="notice-form__input" id="login-username" name="username" type="text" autocomplete="username" required>
+                  </div>
+                </div>
+                <div class="notice-form__row">
+                  <label class="notice-form__label" for="login-password">비밀번호</label>
+                  <div class="notice-form__field">
+                    <input class="notice-form__input" id="login-password" name="password" type="password" autocomplete="current-password" minlength="6" required>
+                  </div>
+                </div>
+                <div class="notice-form__field">
+                  <p class="auth-page__message" data-js="login-error" role="alert"></p>
+                  <div class="notice-form__actions">
+                    <button class="notice-button notice-button--primary" type="submit">로그인</button>
+                  </div>
+                </div>
+              </form>
+            </section>
+
+            <p class="auth-page__switch">아직 계정이 없으신가요? <a data-js="signup-link" href="./signup.html">회원가입</a></p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div data-site-footer></div>
+  </body>
+</html>

@@ -77,8 +77,14 @@
 - 게시물은 Firebase Firestore의 `notices` 컬렉션에 저장하고, 첨부 파일 바이너리는 기존처럼 브라우저의 IndexedDB에 저장합니다. IndexedDB 첨부 파일은 같은 브라우저에서만 접근할 수 있습니다.
 - 홈 화면 `body` 바로 아래의 문서 흐름에 목록 정렬 기준 상위 3개 공지를 어두운 배경과 흰색 글자로 된 한 줄 회전 박스로 표시합니다. 분홍색 라운드 `Notice` 라벨, 중앙 정렬 공지 문구, 오른쪽 컨트롤을 제공하며 멈춤 컨트롤은 네모형입니다. 공지 박스가 메뉴와 나머지 페이지 콘텐츠를 밀어내며, 닫거나 사용자가 스크롤하면 높이만큼 스크롤 위치를 보정해 빈 공간 없이 아래 콘텐츠가 함께 위로 이동합니다. 포인터가 올라오거나 키보드 포커스가 진입하면 자동 회전을 멈추며, 모션 감소 설정에서는 자동 회전을 시작하지 않습니다.
 - 공통 회전 박스 표현과 제어는 [`js/modules/notice-ticker.js`](./js/modules/notice-ticker.js), 스타일은 [`css/components/notice-ticker.css`](./css/components/notice-ticker.css)에서 관리합니다.
-- Firebase 설정은 [`js/services/firebase-config.js`](./js/services/firebase-config.js)에서 관리합니다. Firestore가 비어 있고 초기화 문서가 없을 때 현재 브라우저의 LocalStorage 공지 데이터를 한 번 가져옵니다. 기존 공지가 없으면 샘플 공지를 초기 데이터로 사용합니다.
-- 테스트용 Firestore 규칙 예시는 [`firestore-test.rules`](./firestore-test.rules)이며 2026-12-06에 만료됩니다. 테스트 데이터만 사용하고, 배포 전에는 반드시 제한된 규칙으로 교체합니다.
+- Firebase 설정은 [`js/services/firebase-config.js`](./js/services/firebase-config.js)에서 관리합니다. 관리자 첫 방문 시 Firestore가 비어 있고 초기화 문서가 없으면 그 브라우저의 LocalStorage 공지 데이터를 한 번 가져옵니다. 기존 공지가 없으면 샘플 공지를 초기 데이터로 사용합니다.
+- 회원가입과 로그인은 Firebase Authentication 이메일/비밀번호 인증을 사용하며, 계정 프로필과 아이디 중복 확인은 Firestore의 `users`, `usernames` 컬렉션을 사용합니다. Firebase는 비밀번호를 직접 저장하지 않습니다.
+- 로그인 페이지는 [`pages/login.html`](./pages/login.html), 회원가입 페이지는 [`pages/signup.html`](./pages/signup.html)에서 제공합니다. 로그인 화면 하단의 회원가입 링크로 이동하고, 회원가입 화면에는 로그인 페이지로 돌아가는 링크를 제공합니다.
+- 공통 헤더와 푸터는 페이지에 직접 작성하지 않고 [`partials/`](./partials/)의 템플릿으로 관리합니다. 모든 페이지가 [`partials/header.html`](./partials/header.html)의 동일한 헤더를 사용하며, [`js/modules/site-shell.js`](./js/modules/site-shell.js)가 헤더와 푸터를 로드하고 인증 상태와 푸터 동작을 초기화합니다. 페이지를 로컬 서버에서 제공해야 템플릿을 불러올 수 있습니다.
+- 공지사항의 작성·수정·삭제와 초기 데이터 이전은 Firestore `users/{uid}` 문서의 `role: "admin"`으로 제한합니다. 테스트 규칙 및 관리자 계정 수동 등록 절차는 [`firestore-test.rules`](./firestore-test.rules)에 맞춰 Firebase Console에 적용해야 합니다.
+- 로그인은 아이디 조회를 위해 `usernames/{아이디}` 문서에서 이메일 주소를 읽습니다. 규칙은 문서 단건 조회만 허용하고 목록 조회는 막지만, 운영 서비스라면 Cloud Functions 등 서버 인증으로 전환해 이메일 노출을 방지해야 합니다.
+- IndexedDB 첨부 파일은 같은 브라우저에만 저장됩니다. 테스트 목적으로만 사용하며 여러 기기에서 공유할 파일은 Firebase Storage로 옮겨야 합니다.
+- Firebase Console에서 Authentication의 이메일/비밀번호 제공업체를 활성화하고, Firestore 규칙에 [`firestore-test.rules`](./firestore-test.rules)를 게시한 뒤 관리자 계정을 수동 등록합니다. Authentication에서 지정 이메일로 계정을 생성하고 비밀번호는 6자 이상으로 정합니다. 생성된 UID를 이용해 `users/{uid}` 문서에 `{ name: "관리자", username: "admin", email: "admin.com@company.co.kr", role: "admin", createdAt: "ISO 날짜" }`를, `usernames/admin` 문서에 `{ uid: "관리자 UID", email: "admin.com@company.co.kr" }`를 추가합니다. 일반 회원가입 계정은 `role: "user"`로 생성되며 관리자 권한을 변경할 수 없습니다.
 
 ---
 

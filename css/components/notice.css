@@ -70,6 +70,10 @@
     gap: var(--header-action-gap);
   }
 
+  .notice-site-header__content > .site-auth {
+    margin-inline-start: auto;
+  }
+
   .notice-site-header__actions a {
     display: grid;
     width: var(--hit-min);
@@ -746,6 +750,10 @@
   .notice-site-header__brand,
   .notice-site-header__actions {
     display: none;
+  }
+
+  .notice-site-header__content {
+    flex-wrap: wrap;
   }
 
   .notice-site-header__nav {

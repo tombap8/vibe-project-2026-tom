@@ -10,7 +10,8 @@ import {
   updateDoc,
   writeBatch,
 } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
-import { db } from './firebase-config.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
+import { auth, db } from './firebase-config.js';
 import { createLocalStorageNoticeRepository } from './notice-local-storage-repository.js';
 
 const COLLECTION_NAME = 'notices';
@@ -43,7 +44,22 @@ async function writePostsInBatches(posts) {
   }
 }
 
-async function initializeFirestore() {
+function waitForAuthState() {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe();
+      resolve(user);
+    }, reject);
+  });
+}
+
+async function initializeFirestoreForAdmin() {
+  const user = await waitForAuthState();
+  if (!user) return;
+
+  const profile = await getDoc(doc(db, 'users', user.uid));
+  if (!profile.exists() || profile.data().role !== 'admin') return;
+
   const initialized = await getDoc(initializationDocument);
   if (initialized.exists()) return;
 
@@ -58,7 +74,7 @@ async function initializeFirestore() {
 
 function ensureInitialized() {
   if (!initializationPromise) {
-    initializationPromise = initializeFirestore().catch((error) => {
+    initializationPromise = initializeFirestoreForAdmin().catch((error) => {
       initializationPromise = undefined;
       throw error;
     });
