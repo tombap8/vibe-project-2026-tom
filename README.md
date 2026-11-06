@@ -74,10 +74,11 @@
 - 게시판 주소: [`pages/notice.html`](./pages/notice.html)
 - URL의 `view` 값으로 목록·상세·작성·수정 화면을 전환하며, 최초 방문 시 시안에 나온 공지사항 샘플을 생성합니다.
 - 화면 모듈은 [`js/services/notice-repository.js`](./js/services/notice-repository.js)의 Repository 인터페이스만 사용합니다.
-- 게시물 JSON은 `discovery:notice:posts` localStorage 키에 저장하고, 첨부 파일 바이너리는 IndexedDB에 저장해 localStorage 용량 제한을 피합니다.
+- 게시물은 Firebase Firestore의 `notices` 컬렉션에 저장하고, 첨부 파일 바이너리는 기존처럼 브라우저의 IndexedDB에 저장합니다. IndexedDB 첨부 파일은 같은 브라우저에서만 접근할 수 있습니다.
 - 홈 화면 `body` 바로 아래의 문서 흐름에 목록 정렬 기준 상위 3개 공지를 어두운 배경과 흰색 글자로 된 한 줄 회전 박스로 표시합니다. 분홍색 라운드 `Notice` 라벨, 중앙 정렬 공지 문구, 오른쪽 컨트롤을 제공하며 멈춤 컨트롤은 네모형입니다. 공지 박스가 메뉴와 나머지 페이지 콘텐츠를 밀어내며, 닫거나 사용자가 스크롤하면 높이만큼 스크롤 위치를 보정해 빈 공간 없이 아래 콘텐츠가 함께 위로 이동합니다. 포인터가 올라오거나 키보드 포커스가 진입하면 자동 회전을 멈추며, 모션 감소 설정에서는 자동 회전을 시작하지 않습니다.
 - 공통 회전 박스 표현과 제어는 [`js/modules/notice-ticker.js`](./js/modules/notice-ticker.js), 스타일은 [`css/components/notice-ticker.css`](./css/components/notice-ticker.css)에서 관리합니다.
-- Firestore 전환 시 Repository 진입점과 구현체를 교체하고, 첨부 파일 메서드는 Firebase Storage 구현으로 교체합니다.
+- Firebase 설정은 [`js/services/firebase-config.js`](./js/services/firebase-config.js)에서 관리합니다. Firestore가 비어 있고 초기화 문서가 없을 때 현재 브라우저의 LocalStorage 공지 데이터를 한 번 가져옵니다. 기존 공지가 없으면 샘플 공지를 초기 데이터로 사용합니다.
+- 테스트용 Firestore 규칙 예시는 [`firestore-test.rules`](./firestore-test.rules)이며 2026-12-06에 만료됩니다. 테스트 데이터만 사용하고, 배포 전에는 반드시 제한된 규칙으로 교체합니다.
 
 ---
 
