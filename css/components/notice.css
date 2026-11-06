@@ -747,6 +747,12 @@
     font-weight: 700;
   }
 
+  .notice-form__input:is(textarea) {
+    padding-block: var(--space-3);
+    border-radius: var(--space-1);
+    font: inherit;
+  }
+
   .notice-site-header__brand,
   .notice-site-header__actions {
     display: none;

@@ -26,6 +26,62 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /inquiries/{inquiryId} {
+      function isOwner() {
+        return signedIn() && resource.data.authorId == request.auth.uid;
+      }
+
+      function validQuestion() {
+        return request.resource.data.title is string
+          && request.resource.data.title.size() > 0
+          && request.resource.data.title.size() <= 120
+          && request.resource.data.type in ['배송문의', '계정문의', '교환/환불', '시스템오류', '기타']
+          && request.resource.data.content is string
+          && request.resource.data.content.size() > 0
+          && request.resource.data.content.size() <= 5000
+          && request.resource.data.isPrivate is bool
+          && request.resource.data.answer is string
+          && request.resource.data.createdAt is string
+          && request.resource.data.updatedAt is string;
+      }
+
+      allow get, list: if resource.data.get('isPrivate', false) == false || isOwner() || isAdmin();
+      allow create: if signedIn()
+        && request.resource.data.keys().hasAll([
+          'title', 'type', 'content', 'isPrivate', 'authorId',
+          'answer', 'answeredAt', 'answeredBy', 'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'title', 'type', 'content', 'isPrivate', 'authorId',
+          'answer', 'answeredAt', 'answeredBy', 'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.answer == ''
+        && request.resource.data.answeredAt == ''
+        && request.resource.data.answeredBy == ''
+        && validQuestion();
+      allow update: if (
+        isOwner()
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['title', 'type', 'content', 'isPrivate', 'updatedAt'])
+        && request.resource.data.authorId == resource.data.authorId
+        && request.resource.data.answer == resource.data.answer
+        && request.resource.data.answeredAt == resource.data.answeredAt
+        && request.resource.data.answeredBy == resource.data.answeredBy
+        && validQuestion()
+      ) || (
+        isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['answer', 'answeredAt', 'answeredBy'])
+        && request.resource.data.answer is string
+        && request.resource.data.answer.size() > 0
+        && request.resource.data.answer.size() <= 5000
+        && request.resource.data.answeredAt is string
+        && request.resource.data.answeredBy == request.auth.uid
+      );
+      allow delete: if isOwner();
+    }
+
     match /users/{uid} {
       allow get: if signedIn() && (request.auth.uid == uid || isAdmin());
       allow list: if false;

@@ -1,0 +1,75 @@
+@layer components {
+  .qna-list__title > a,
+  .qna-list__title > span:first-child {
+    display: block;
+  }
+
+  .qna-private {
+    display: block;
+    width: fit-content;
+    margin-block-start: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: var(--fs-12);
+  }
+
+  .qna-status {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-pill);
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-size: var(--fs-12);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .qna-form__content {
+    min-height: 240px;
+    padding: var(--space-3);
+    border-radius: var(--notice-input-radius);
+    line-height: var(--notice-body-line-height);
+    resize: vertical;
+  }
+
+  .qna-content {
+    white-space: pre-wrap;
+  }
+
+  .qna-answer {
+    background: var(--color-surface);
+  }
+
+  .qna-answer h2 {
+    font-size: var(--fs-18);
+  }
+
+  .qna-answer-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--notice-panel-padding);
+    border: var(--line) solid var(--color-border);
+    border-radius: var(--notice-radius);
+  }
+
+  .qna-answer-form > label {
+    font-weight: 700;
+  }
+
+  .qna-answer-form textarea {
+    width: 100%;
+    min-height: 160px;
+    padding: var(--space-3);
+    border-radius: var(--notice-input-radius);
+    line-height: var(--notice-body-line-height);
+    resize: vertical;
+  }
+
+  @media (max-width: 768px) {
+    .qna-answer-form {
+      padding: var(--space-4);
+    }
+  }
+}

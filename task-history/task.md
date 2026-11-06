@@ -38,6 +38,12 @@
    - 데스크톱 기준 한 화면 4개 카드 그리드 및 초과 데이터 시 Swiper 슬라이딩 적용 (`watchOverflow: true`).
    - 4개 카테고리 알약 탭 전환 시 동적 카드 렌더링 및 스와이퍼 갱신.
    - 인플루언서 스타일 이미지(좌하단 `@username` 오버레이) + 하단 2개 연관 상품(썸네일, 상품명, 가격) 구조.
+10. **묻고답하기 게시판**:
+    - 공지사항과 유사한 목록·상세·질문 작성·수정 화면을 `pages/qna.html`에 추가하고 하단 메뉴에서 연결.
+    - 배송문의, 계정문의, 교환/환불, 시스템오류, 기타 5개 질문 유형 선택·필터와 제목 검색을 구현.
+    - 로그인 회원만 질문 작성, 작성자 본인만 수정·삭제, 비공개 질문은 목록에 표시하되 작성자와 관리자만 조회하도록 구현.
+    - 관리자 답변 등록·수정 기능과 답변 완료 목록 표시를 추가하고 Firebase Firestore `inquiries` 컬렉션에 질문·답변 저장.
+    - `firestore-test.rules`에 질문 읽기·쓰기 및 관리자 답변 권한 규칙을 추가. 실제 적용을 위해 Firebase 프로젝트에 규칙을 배포해야 한다.
 
 ## 주요 파일
 
@@ -54,6 +60,12 @@
 - `css/components/collection.css`: 컬렉션(THE ACTIVE LAYER) 섹션 스타일
 - `css/components/trend-pick.css`: 디스커버러의 취향(TREND PICK) 섹션 스타일
 - `css/components/footer.css`: 푸터 및 회사정보 아코디언/드롭다운 스타일
+- `css/components/notice.css`: 공지사항 게시판 공통 스타일
+- `css/components/qna.css`: 묻고답하기 게시판 전용 스타일
+- `pages/qna.html`: 묻고답하기 페이지
+- `js/modules/qna-board.js`: 묻고답하기 화면 및 상호작용
+- `js/services/qna-repository.js`: Firebase 묻고답하기 데이터 저장소
+- `firestore-test.rules`: Firestore 접근 권한 규칙
 - `css/utilities.css`: 접근성 유틸리티 (.visually-hidden 등)
 - `css/main.css`: CSS 레이어 관리 및 엔트리
 - `js/main.js`: 메인 엔트리 및 공통 상호작용 제어
@@ -216,6 +228,7 @@
 - 후속 수정에서 Notice 박스의 고정 위치를 제거해 body의 일반 문서 흐름에 놓았다. 브라우저에서 박스 표시 시 높이 57px만큼 main이 밀리고 닫으면 main의 offset이 0으로 돌아오는 것과 헤더 오프셋 복귀를 확인했다. 검증 후 박스를 닫아 회전 타이머를 종료했다.
 - 닫을 때 박스 높이만큼 현재 스크롤 위치를 보정해 브라우저 스크롤 앵커링으로 상단 공백이 남지 않도록 했다. 브라우저에서 닫기 전 스크롤 위치 56.6px에서 닫은 후 0px, 헤더 top 0px 및 main offset 0px을 확인했으며 JavaScript 문법 검사도 통과했다.
 - 스크롤 입력 시 Notice를 자동으로 닫도록 마우스 휠·터치 이동·스크롤 키 입력 처리를 추가하고, 닫힘 시 스크롤 위치 보정을 재사용한다. 브라우저에서 휠 입력 후 공지 닫힘, 헤더 top 0px, main offset 0px을 확인했으며, 검증이 끝나 회전 타이머가 종료된 상태다.
+- 2026-11-06 — 묻고답하기 게시판 추가: 공지사항과 유사한 게시판 화면, 5개 문의 유형, 로그인 회원 질문 작성, 작성자 본인 수정·삭제, 비공개 조회 제한, 관리자 답변 기능을 구현했다. Firebase `inquiries` 저장소와 Firestore 규칙을 추가하고 푸터에 메뉴 링크를 연결했다. JavaScript 구문 검사를 통과했으며, Firestore 규칙은 Firebase 프로젝트에 배포해야 적용된다.
 
 ### 2026-11-05 — 베스트 상품 상세 및 장바구니 구현
 - `data/best-items.json`을 Best Item 카드 및 상세 화면 상품 기본정보의 데이터 원본으로 연결했다.

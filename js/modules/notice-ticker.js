@@ -59,6 +59,8 @@ export function renderNoticeTicker(noticePosts, noticePageUrl) {
 
   if (!noticePosts.length) {
     tickerLink.textContent = '등록된 공지사항이 없습니다.';
+    ticker.hidden = true;
+    document.body.classList.remove('notice-ticker-visible', 'notice-ticker-scrolled');
     pauseButton.hidden = true;
     playButton.hidden = true;
     return;
@@ -66,6 +68,8 @@ export function renderNoticeTicker(noticePosts, noticePageUrl) {
 
   posts = noticePosts.slice(0, 3);
   currentIndex = 0;
+  pauseButton.hidden = false;
+  playButton.hidden = false;
   updatePost(noticePageUrl);
   ticker.hidden = false;
   document.body.classList.add('notice-ticker-visible');
