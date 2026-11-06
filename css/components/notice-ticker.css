@@ -78,6 +78,14 @@
     inset-block-start: calc(var(--notice-header-height) + var(--line));
   }
 
+  body.notice-ticker-scrolled {
+    --menu-top: var(--header-h-pc);
+  }
+
+  body.notice-ticker-scrolled .outer-box--header {
+    inset-block-start: 0;
+  }
+
   @media (max-width: 768px) {
     .notice-ticker__content {
       grid-template-columns: auto minmax(0, 1fr) auto;

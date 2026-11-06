@@ -535,6 +535,8 @@ function initFullPageScroll() {
   const SCROLL_COOLDOWN = 850;
   const WHEEL_GESTURE_GAP = 120;
   let lastWheelTime = 0;
+  const isMobileViewport = window.matchMedia("(max-width: 768px)");
+  let touchStart = null;
 
   // 헤더 스타일 실시간 동기화 (1,2,3페이지: 다크, 3페이지 하단: 화이트 반전)
   function updateHeaderTheme(currentScrollY) {
@@ -546,6 +548,7 @@ function initFullPageScroll() {
     const shortsTop = shortsSection ? shortsSection.offsetTop : (hero3.offsetTop + hero3.offsetHeight);
     const isLight = currentY >= (shortsTop - 80);
     pageHeader.classList.toggle("outer-box--header--light", isLight);
+    tabbar?.classList.toggle("tabbar--light", isLight);
   }
 
   // 히어로 자동 스냅 활성화
@@ -643,6 +646,10 @@ function initFullPageScroll() {
     () => {
       const currentY = window.scrollY || window.pageYOffset;
       updateHeaderTheme(currentY);
+      const ticker = document.querySelector('[data-js="notice-ticker"]');
+      if (ticker && !ticker.hidden) {
+        document.body.classList.toggle("notice-ticker-scrolled", currentY >= ticker.offsetHeight);
+      }
 
       if (isScrolling) return;
 
@@ -727,6 +734,79 @@ function initFullPageScroll() {
     },
     { passive: false }
   );
+
+  window.addEventListener("touchstart", (event) => {
+    if (!isMobileViewport.matches || event.touches.length !== 1 || isScrolling) {
+      touchStart = null;
+      return;
+    }
+
+    if (menu.dataset.state === "open" || menu.dataset.state === "opening") return;
+    if (searchModal && searchModal.dataset.state === "open") return;
+    const shortsModal = document.querySelector(".shorts-modal");
+    if (shortsModal && shortsModal.dataset.state === "open") return;
+
+    const touch = event.touches[0];
+    const pageY = touch.clientY + (window.scrollY || window.pageYOffset);
+    const heroIndex = heroSections.findIndex((section) => (
+      pageY >= section.offsetTop && pageY < section.offsetTop + section.offsetHeight
+    ));
+    const shortsTop = shortsSection?.offsetTop ?? Infinity;
+    const atNormalContentStart = heroIndex === -1
+      && (window.scrollY || window.pageYOffset) <= shortsTop + 20
+      && (window.scrollY || window.pageYOffset) >= shortsTop - 20;
+
+    if (heroIndex !== -1) {
+      touchStart = { x: touch.clientX, y: touch.clientY, heroIndex, mode: "hero" };
+    } else if (atNormalContentStart) {
+      touchStart = { x: touch.clientX, y: touch.clientY, heroIndex: heroSections.length - 1, mode: "normal" };
+    } else {
+      touchStart = null;
+    }
+  }, { passive: true });
+
+  window.addEventListener("touchmove", (event) => {
+    if (!touchStart || event.touches.length !== 1) return;
+    const touch = event.touches[0];
+    const deltaX = touch.clientX - touchStart.x;
+    const deltaY = touch.clientY - touchStart.y;
+    if (Math.abs(deltaY) < 8 || Math.abs(deltaY) <= Math.abs(deltaX)) return;
+    if (touchStart.mode === "normal" && deltaY < 0) return;
+    event.preventDefault();
+  }, { passive: false });
+
+  window.addEventListener("touchend", (event) => {
+    if (!touchStart || !isMobileViewport.matches) {
+      touchStart = null;
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - touchStart.x;
+    const deltaY = touch.clientY - touchStart.y;
+    const start = touchStart;
+    touchStart = null;
+    if (Math.abs(deltaY) < 45 || Math.abs(deltaY) <= Math.abs(deltaX)) return;
+
+    if (start.mode === "normal") {
+      if (deltaY > 0) scrollToSection(start.heroIndex);
+      return;
+    }
+
+    if (deltaY < 0) {
+      if (start.heroIndex < heroSections.length - 1) {
+        scrollToSection(start.heroIndex + 1);
+      } else {
+        scrollToNormalContent();
+      }
+    } else if (start.heroIndex > 0) {
+      scrollToSection(start.heroIndex - 1);
+    }
+  }, { passive: true });
+
+  window.addEventListener("touchcancel", () => {
+    touchStart = null;
+  }, { passive: true });
 
   window.addEventListener("keydown", (event) => {
     if (menu.dataset.state === "open" || menu.dataset.state === "opening") return;

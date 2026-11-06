@@ -48,25 +48,21 @@ function play(noticePageUrl) {
 
 function closeTicker() {
   if (ticker.hidden) return;
-  const scrollPosition = window.scrollY;
-  const tickerHeight = ticker.offsetHeight;
   pause();
   ticker.hidden = true;
   document.body.classList.remove('notice-ticker-visible');
-  window.scrollTo({
-    top: Math.max(0, scrollPosition - tickerHeight),
-    behavior: 'instant',
-  });
-}
-
-function handleScrollKeydown(event) {
-  if (!['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) return;
-  if (event.target.closest('button, a, input, textarea, select, [contenteditable="true"]')) return;
-  closeTicker();
+  document.body.classList.remove('notice-ticker-scrolled');
 }
 
 export function renderNoticeTicker(noticePosts, noticePageUrl) {
-  if (!ticker || !noticePosts.length) return;
+  if (!ticker || !tickerLink) return;
+
+  if (!noticePosts.length) {
+    tickerLink.textContent = '등록된 공지사항이 없습니다.';
+    pauseButton.hidden = true;
+    playButton.hidden = true;
+    return;
+  }
 
   posts = noticePosts.slice(0, 3);
   currentIndex = 0;
@@ -79,11 +75,6 @@ export function renderNoticeTicker(noticePosts, noticePageUrl) {
   pauseButton.addEventListener('click', pause);
   playButton.addEventListener('click', () => play(noticePageUrl));
   closeButton.addEventListener('click', closeTicker);
-  window.addEventListener('wheel', (event) => {
-    if (event.deltaY !== 0) closeTicker();
-  }, { passive: true });
-  window.addEventListener('touchmove', closeTicker, { passive: true });
-  window.addEventListener('keydown', handleScrollKeydown);
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     updateControls();
